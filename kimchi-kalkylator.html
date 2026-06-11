@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>🥬 Kimchi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@300;400;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#fdf6ee; --bg2:#f7ede0; --surface:#fff; --border:#e8d8c4; --border2:#d4c0a8;
+  --red:#c8271c; --red2:#a01e14; --red-pale:#fdecea;
+  --amber:#c47d0a; --amber-soft:rgba(196,125,10,0.1);
+  --green:#2a7a48; --green-bright:#299155; --green-pale:rgba(42,122,72,0.1);
+  --cream:#4a3020; --cream2:#6b4c34; --cream3:#9a7a5a;
+  --muted:#a08060; --muted2:#c4a882;
+  --tab-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+/* ── HERO ── */
+.hero{position:relative;padding:2.8rem 1.5rem 2rem;text-align:center;overflow:hidden;background:var(--red);}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);}
+.hero-bg-char{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);font-family:'Noto Serif KR',serif;font-size:14rem;color:rgba(255,255,255,0.07);pointer-events:none;line-height:1;user-select:none;}
+.hero-emoji{font-size:2.5rem;display:block;margin-bottom:0.4rem;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,5rem);letter-spacing:0.08em;color:#fff;line-height:0.95;}
+.hero h1 span{display:block;color:rgba(255,255,255,0.72);font-size:0.52em;letter-spacing:0.18em;}
+.hero-sub{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem;letter-spacing:0.1em;text-transform:uppercase;}
+
+/* ── TAB BAR ── */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.2rem;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;color:var(--muted2);letter-spacing:0.04em;transition:color 0.15s;padding:0;}
+.tab-btn .tab-icon{font-size:1.3rem;line-height:1;transition:transform 0.15s;}
+.tab-btn.active{color:var(--red);}
+.tab-btn.active .tab-icon{transform:scale(1.1);}
+
+/* ── PAGES ── */
+.page{display:none;padding-bottom:calc(var(--tab-h) + 1rem);}
+.page.active{display:block;}
+
+/* ── CONTAINER ── */
+.container{max-width:580px;margin:0 auto;padding:1.5rem 1rem 0;}
+
+/* ── SECTION LABELS ── */
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.2em;color:var(--red);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.6rem;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+
+/* ── CARDS ── */
+.slider-card,.card,.steps-card,.prak-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.3rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(100,50,20,0.06);animation:fadeUp 0.3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.slider-card{position:relative;overflow:hidden;}
+.slider-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);border-radius:18px 18px 0 0;}
+
+/* SLIDER */
+.kg-row{display:flex;align-items:flex-end;gap:0.5rem;margin-bottom:1rem;}
+.kg-big{font-family:'Bebas Neue',sans-serif;font-size:4.8rem;line-height:1;color:var(--red);}
+.kg-unit{font-size:1rem;color:var(--muted);padding-bottom:0.6rem;font-weight:300;}
+.yield-pill{margin-left:auto;background:var(--red-pale);border:1px solid rgba(200,39,28,0.2);border-radius:30px;padding:0.28rem 0.8rem 0.68rem;font-size:0.74rem;color:var(--red);font-weight:500;white-space:nowrap;}
+input[type="range"]{width:100%;height:5px;border-radius:3px;background:var(--border);outline:none;appearance:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--red);box-shadow:0 2px 8px rgba(200,39,28,0.4);cursor:pointer;transition:transform 0.1s;}
+input[type="range"]::-webkit-slider-thumb:active{transform:scale(1.15);}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:0.35rem;font-size:0.67rem;color:var(--muted2);}
+.manual-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.8rem;padding:0.42rem 0.72rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;}
+.manual-row span{font-size:0.76rem;color:var(--muted);white-space:nowrap;}
+#manualInput{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--cream);font-size:1rem;font-family:'DM Sans',sans-serif;width:62px;text-align:center;outline:none;padding:0.1rem;-moz-appearance:textfield;}
+#manualInput::-webkit-inner-spin-button,#manualInput::-webkit-outer-spin-button{-webkit-appearance:none;}
+.sync-banner{display:flex;align-items:center;gap:0.5rem;margin-top:0.65rem;padding:0.38rem 0.68rem;background:var(--green-pale);border:1px solid rgba(41,145,85,0.25);border-radius:8px;font-size:0.75rem;color:var(--green);opacity:0;transition:opacity 0.4s;}
+.sync-banner.visible{opacity:1;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green-bright);flex-shrink:0;}
+
+/* INGREDIENT ROWS */
+.ing-row{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);gap:0.5rem;}
+.ing-row:last-child{border-bottom:none;}
+.ing-row:hover{background:var(--bg2);border-radius:7px;margin:0 -0.3rem;padding-left:0.3rem;padding-right:0.3rem;}
+.ing-name{font-size:0.87rem;color:var(--cream2);flex:1;line-height:1.3;}
+.ing-name .tag{font-size:0.64rem;color:var(--muted);font-style:italic;margin-left:0.25rem;}
+.ing-name .opt-line{display:block;font-size:0.68rem;color:var(--muted2);font-style:italic;margin-top:0.1rem;}
+.ing-val{font-family:'Bebas Neue',sans-serif;font-size:1.12rem;letter-spacing:0.04em;color:var(--red);white-space:nowrap;text-align:right;min-width:78px;}
+
+/* SALT TOGGLE */
+.toggle-row{display:flex;gap:0.35rem;margin-bottom:0.75rem;background:var(--bg2);border-radius:10px;padding:0.2rem;}
+.toggle-btn{flex:1;padding:0.46rem;border-radius:8px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:0.81rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.toggle-btn.active{background:var(--red);color:#fff;box-shadow:0 2px 8px rgba(200,39,28,0.28);}
+.mode-desc{font-size:0.77rem;color:var(--cream3);background:var(--bg2);border-radius:8px;padding:0.48rem 0.68rem;margin-bottom:0.75rem;line-height:1.5;border-left:2px solid var(--border2);}
+.mode-desc.hidden{display:none;}
+.mode-desc strong{color:var(--amber);}
+
+/* BOWL ROWS */
+.bowl-row{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+.bowl-name{background:transparent;border:none;border-bottom:1px dashed var(--border2);font-family:'DM Sans',sans-serif;font-size:0.79rem;font-weight:600;color:var(--cream2);width:72px;outline:none;padding:0.1rem;transition:border-color 0.15s;}
+.bowl-name:focus{border-color:var(--red);}
+.bowl-g-wrap{display:flex;align-items:center;gap:0.22rem;flex:1;}
+.bowl-g{width:72px;padding:0.28rem 0.38rem;background:var(--bg2);border:1px solid var(--border);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--cream);outline:none;transition:border-color 0.15s;-moz-appearance:textfield;}
+.bowl-g:focus{border-color:var(--red);}
+.bowl-g::-webkit-inner-spin-button,.bowl-g::-webkit-outer-spin-button{-webkit-appearance:none;}
+.bowl-g-unit{font-size:0.73rem;color:var(--muted);}
+.bowl-res{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;color:var(--amber);min-width:82px;text-align:right;}
+.bowl-res.empty{color:var(--border2);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:300;}
+.bowl-del{background:none;border:none;color:var(--muted2);font-size:0.88rem;cursor:pointer;padding:0.18rem;border-radius:4px;transition:color 0.15s;line-height:1;}
+.bowl-del:hover{color:var(--red);}
+.add-bowl{width:100%;margin-top:0.55rem;padding:0.46rem;background:none;border:1.5px dashed var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.79rem;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.add-bowl:hover{border-color:var(--red);color:var(--red);}
+.salt-total{display:flex;justify-content:space-between;align-items:baseline;margin-top:0.72rem;padding-top:0.62rem;border-top:1px solid var(--border2);font-size:0.8rem;color:var(--muted);min-height:1.4rem;}
+.salt-total .t-val{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:var(--amber);letter-spacing:0.04em;}
+.sync-btn{display:none;width:100%;margin-top:0.65rem;padding:0.56rem;background:var(--green);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;color:#fff;cursor:pointer;transition:opacity 0.18s,transform 0.1s;}
+.sync-btn.visible{display:block;}
+.sync-btn:hover{opacity:0.88;}
+.sync-btn:active{transform:scale(0.98);}
+
+/* STEPS */
+.steps-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.3rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(100,50,20,0.06);}
+.step-row{display:flex;gap:0.85rem;padding:0.78rem 0;border-bottom:1px solid var(--border);position:relative;}
+.step-row:last-child{border-bottom:none;padding-bottom:0;}
+.step-num{width:27px;height:27px;border-radius:50%;background:var(--red-pale);border:1.5px solid rgba(200,39,28,0.22);color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:0.83rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.04rem;transition:all 0.2s;}
+.step-row.done .step-num{background:var(--green);border-color:var(--green);color:#fff;}
+.step-body{flex:1;}
+.step-title{font-size:0.88rem;font-weight:600;color:var(--cream);margin-bottom:0.18rem;}
+.step-row.done .step-title{color:var(--muted);text-decoration:line-through;}
+.step-desc{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.timer-btn{display:inline-flex;align-items:center;gap:0.28rem;margin-top:0.42rem;padding:0.2rem 0.58rem;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.72rem;color:var(--cream3);cursor:pointer;transition:all 0.15s;user-select:none;}
+.timer-btn:hover{border-color:var(--amber);color:var(--amber);}
+.timer-btn.running{background:var(--red-pale);border-color:var(--red);color:var(--red);}
+.timer-btn.done{background:var(--green-pale);border-color:var(--green);color:var(--green);}
+.step-check{position:absolute;right:0;top:0.78rem;width:22px;height:22px;border-radius:5px;border:1.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:transparent;transition:all 0.15s;}
+.step-check:hover{border-color:var(--green);}
+.step-row.done .step-check{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* EXPORT */
+.export-btn{width:100%;padding:0.82rem;background:transparent;border:1.5px solid var(--border2);border-radius:14px;font-family:'Bebas Neue',sans-serif;font-size:1.02rem;letter-spacing:0.14em;color:var(--cream2);cursor:pointer;transition:all 0.2s;margin-top:0.5rem;}
+.export-btn:hover{background:var(--red);border-color:var(--red);color:#fff;}
+.note{margin-top:1rem;padding:0.72rem 0.95rem;background:var(--amber-soft);border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:0.78rem;color:var(--cream3);line-height:1.6;}
+.note strong{display:block;color:var(--amber);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.18rem;}
+footer{text-align:center;font-size:0.7rem;color:var(--muted2);margin-top:1.5rem;letter-spacing:0.05em;padding-bottom:0.5rem;}
+
+/* ── TIMER OVERLAY ── */
+.timer-overlay{display:none;position:fixed;bottom:calc(var(--tab-h) + 0.8rem + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--border);border-radius:20px;padding:1rem 1.5rem;text-align:center;box-shadow:0 8px 40px rgba(100,50,20,0.18);z-index:200;min-width:230px;animation:slideUp 0.22s ease;}
+.timer-overlay.visible{display:block;}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(18px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
+.t-label{font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.2rem;}
+.t-time{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:0.05em;color:var(--cream);line-height:1;}
+.t-time.urgent{color:var(--red);animation:pulse 0.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.45;}}
+.t-stop{margin-top:0.52rem;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:0.26rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:0.77rem;cursor:pointer;transition:all 0.15s;}
+.t-stop:hover{border-color:var(--red);color:var(--red);}
+
+/* ══════════════════════════════════
+   PRAKTISKT PAGE
+══════════════════════════════════ */
+.prak-card{animation-delay:0.05s;}
+
+/* Dagbok */
+.dagbok-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem;}
+.dagbok-header h3{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:0.12em;color:var(--cream2);}
+.new-batch-btn{background:var(--red);color:#fff;border:none;border-radius:8px;padding:0.3rem 0.7rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:opacity 0.15s;}
+.new-batch-btn:hover{opacity:0.88;}
+.batch-empty{font-size:0.82rem;color:var(--muted2);text-align:center;padding:1rem 0;font-style:italic;}
+.batch-item{background:var(--bg2);border-radius:12px;padding:0.8rem 1rem;margin-bottom:0.6rem;position:relative;}
+.batch-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.4rem;}
+.batch-name{font-size:0.9rem;font-weight:600;color:var(--cream);cursor:pointer;}
+.batch-name:hover{color:var(--red);}
+.batch-date{font-size:0.72rem;color:var(--muted);}
+.batch-days{display:inline-block;background:var(--red-pale);color:var(--red);border-radius:20px;padding:0.18rem 0.6rem;font-size:0.75rem;font-weight:600;margin-right:0.4rem;}
+.batch-days.fermenting{background:var(--amber-soft);color:var(--amber);}
+.batch-days.done{background:var(--green-pale);color:var(--green);}
+.batch-note{font-size:0.78rem;color:var(--cream3);margin-top:0.35rem;font-style:italic;}
+.batch-actions{display:flex;gap:0.4rem;margin-top:0.5rem;}
+.batch-action-btn{flex:1;padding:0.3rem;background:none;border:1px solid var(--border2);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:var(--muted);cursor:pointer;transition:all 0.15s;text-align:center;}
+.batch-action-btn:hover{border-color:var(--red);color:var(--red);}
+.batch-action-btn.kyl{border-color:var(--green);color:var(--green);}
+.batch-del-btn{position:absolute;top:0.6rem;right:0.7rem;background:none;border:none;color:var(--muted2);font-size:0.85rem;cursor:pointer;transition:color 0.15s;}
+.batch-del-btn:hover{color:var(--red);}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(74,48,32,0.4);z-index:300;align-items:center;justify-content:center;}
+.modal-bg.visible{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:1.5rem;width:calc(100% - 2rem);max-width:400px;box-shadow:0 12px 48px rgba(74,48,32,0.2);}
+.modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.12em;color:var(--cream);margin-bottom:1rem;}
+.modal-field{margin-bottom:0.8rem;}
+.modal-field label{display:block;font-size:0.76rem;font-weight:600;color:var(--cream3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;}
+.modal-input{width:100%;padding:0.5rem 0.7rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--cream);outline:none;transition:border-color 0.15s;}
+.modal-input:focus{border-color:var(--red);}
+.modal-btns{display:flex;gap:0.5rem;margin-top:1rem;}
+.modal-save{flex:2;padding:0.55rem;background:var(--red);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;transition:opacity 0.15s;}
+.modal-save:hover{opacity:0.88;}
+.modal-cancel{flex:1;padding:0.55rem;background:none;color:var(--muted);border:1px solid var(--border2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;transition:all 0.15s;}
+.modal-cancel:hover{border-color:var(--red);color:var(--red);}
+
+/* Inköpslista */
+.inkop-add-row{display:flex;gap:0.5rem;margin-bottom:0.8rem;}
+.inkop-input{flex:1;padding:0.45rem 0.65rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--cream);outline:none;transition:border-color 0.15s;}
+.inkop-input:focus{border-color:var(--red);}
+.inkop-add-btn{padding:0.45rem 0.9rem;background:var(--red);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;transition:opacity 0.15s;}
+.inkop-add-btn:hover{opacity:0.88;}
+.inkop-prefill-btn{width:100%;margin-bottom:0.7rem;padding:0.42rem;background:none;border:1.5px dashed var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.inkop-prefill-btn:hover{border-color:var(--amber);color:var(--amber);}
+.inkop-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+.inkop-item:last-child{border-bottom:none;}
+.inkop-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:transparent;transition:all 0.15s;}
+.inkop-check.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.inkop-text{flex:1;font-size:0.86rem;color:var(--cream2);transition:all 0.15s;}
+.inkop-text.checked{text-decoration:line-through;color:var(--muted2);}
+.inkop-del{background:none;border:none;color:var(--muted2);font-size:0.85rem;cursor:pointer;transition:color 0.15s;line-height:1;padding:0.1rem;}
+.inkop-del:hover{color:var(--red);}
+.inkop-clear{width:100%;margin-top:0.6rem;padding:0.42rem;background:none;border:1px solid var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.76rem;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.inkop-clear:hover{border-color:var(--red);color:var(--red);}
+
+/* ══════════════════════════════════
+   KÖK PAGE
+══════════════════════════════════ */
+.kok-toggle-row{display:flex;gap:0.5rem;margin-bottom:1rem;}
+.kok-mode-btn{flex:1;padding:0.55rem;border-radius:10px;border:1.5px solid var(--border2);background:transparent;font-family:'DM Sans',sans-serif;font-size:0.83rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.kok-mode-btn.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 8px rgba(200,39,28,0.28);}
+
+/* Wakelock indicator */
+.wakelock-row{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.9rem;background:var(--bg2);border-radius:10px;margin-bottom:0.8rem;font-size:0.82rem;color:var(--cream3);}
+.wakelock-status{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;}
+.wl-dot{width:7px;height:7px;border-radius:50%;background:var(--muted2);}
+.wl-dot.on{background:var(--green-bright);}
+.wakelock-btn{padding:0.3rem 0.75rem;border-radius:7px;border:1.5px solid var(--border2);background:none;font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.wakelock-btn.on{border-color:var(--green);color:var(--green);}
+.wakelock-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* Big mode */
+.kok-normal .kok-big-view{display:none;}
+.kok-big .kok-normal-view{display:none;}
+
+.kok-big-view{padding:0.5rem 0;}
+.big-ing-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.9rem 0;border-bottom:1px solid var(--border);gap:0.5rem;}
+.big-ing-row:last-child{border-bottom:none;}
+.big-ing-name{font-size:1.15rem;font-weight:500;color:var(--cream2);flex:1;line-height:1.3;}
+.big-ing-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.03em;color:var(--red);white-space:nowrap;}
+.big-section-label{font-family:'Bebas Neue',sans-serif;font-size:0.85rem;letter-spacing:0.18em;color:var(--red);padding:0.8rem 0 0.3rem;border-bottom:2px solid var(--red);margin-bottom:0.2rem;}
+
+.kok-note{font-size:0.78rem;color:var(--muted2);text-align:center;margin-top:0.5rem;font-style:italic;}
+
+/* ── BETYG & FOTO ── */
+.star-row{display:flex;gap:0.3rem;margin:0.5rem 0 0.2rem;}
+.star{font-size:1.4rem;cursor:pointer;opacity:0.25;transition:opacity 0.12s,transform 0.1s;user-select:none;}
+.star.lit{opacity:1;}
+.star:hover{transform:scale(1.15);}
+.batch-stars{display:inline-flex;gap:0.1rem;font-size:0.9rem;margin-right:0.25rem;}
+.batch-photo-link{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.74rem;color:var(--amber);text-decoration:none;margin-top:0.25rem;}
+.batch-photo-link:hover{text-decoration:underline;}
+
+/* ── STATISTIK ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-top:0.1rem;}
+.stat-box{background:var(--bg2);border-radius:12px;padding:0.85rem 0.9rem;text-align:center;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:0.03em;color:var(--red);line-height:1;}
+.stat-label{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:0.2rem;}
+.stat-box.wide{grid-column:1/-1;text-align:left;}
+.best-batch{font-size:0.82rem;color:var(--cream2);margin-top:0.2rem;}
+/* ── SPARADE RECEPT ── */
+.saved-recipes-row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.75rem;}
+.saved-recipe-chip{display:flex;align-items:center;gap:0.3rem;background:var(--bg2);border:1.5px solid var(--border2);border-radius:20px;padding:0.28rem 0.5rem 0.28rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--cream2);cursor:pointer;transition:all 0.15s;}
+.saved-recipe-chip:hover{border-color:var(--red);color:var(--red);}
+.saved-recipe-chip .chip-del{background:none;border:none;color:var(--muted2);font-size:0.75rem;cursor:pointer;padding:0.1rem 0.15rem;line-height:1;border-radius:3px;transition:color 0.12s;}
+.saved-recipe-chip .chip-del:hover{color:var(--red);}
+.save-recipe-btn{margin-top:0.6rem;width:100%;padding:0.42rem;background:none;border:1.5px dashed var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.save-recipe-btn:hover{border-color:var(--amber);color:var(--amber);}
+
+/* Save modal */
+.save-modal-bg{display:none;position:fixed;inset:0;background:rgba(74,48,32,0.4);z-index:300;align-items:flex-end;justify-content:center;}
+.save-modal-bg.visible{display:flex;}
+.save-modal{background:#fff;border-radius:18px 18px 0 0;padding:1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom));width:100%;max-width:580px;box-shadow:0 -8px 40px rgba(74,48,32,0.15);animation:slideUp2 0.22s ease;}
+@keyframes slideUp2{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.save-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.12em;color:var(--cream);margin-bottom:0.9rem;}
+.save-modal-info{font-size:0.82rem;color:var(--muted);margin-bottom:0.9rem;background:var(--bg2);padding:0.55rem 0.75rem;border-radius:8px;}
+.save-modal-info span{font-weight:600;color:var(--red);}
+
+/* ── MOGNADSMÄTARE ── */
+.ripeness-wrap{margin:0.6rem 0 0.2rem;}
+.ripeness-label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;}
+.ripeness-stage{font-size:0.8rem;font-weight:600;}
+.ripeness-days-label{font-size:0.7rem;color:var(--muted);}
+.ripeness-track{position:relative;height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
+.ripeness-fill{height:100%;border-radius:5px;transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1);position:relative;}
+.ripeness-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent 70%,rgba(255,255,255,0.3));animation:sheen 2s ease-in-out infinite;}
+@keyframes sheen{0%,100%{opacity:0;}50%{opacity:1;}}
+.ripeness-markers{display:flex;justify-content:space-between;margin-top:0.3rem;}
+.ripeness-marker{font-size:0.62rem;color:var(--muted2);text-align:center;flex:1;}
+.ripeness-marker:first-child{text-align:left;}
+.ripeness-marker:last-child{text-align:right;}
+
+/* ── FAKTAKORT ── */
+.fact-card{
+  background: var(--red);
+  border-radius: 18px;
+  padding: 1.2rem 1.3rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  animation: fadeUp 0.3s ease both;
+}
+.fact-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%;}
+.fact-card::after{content:'';position:absolute;bottom:-40px;left:-20px;width:140px;height:140px;background:rgba(255,255,255,0.05);border-radius:50%;}
+.fact-eyebrow{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.6);margin-bottom:0.4rem;}
+.fact-text{font-size:0.92rem;font-weight:500;color:#fff;line-height:1.45;position:relative;z-index:1;}
+.fact-tap{font-size:0.68rem;color:rgba(255,255,255,0.45);margin-top:0.6rem;text-align:right;}
+
+/* ── SWIPE TO DELETE ── */
+.batch-swipe-wrap{position:relative;overflow:hidden;border-radius:12px;margin-bottom:0.6rem;}
+.batch-delete-bg{position:absolute;inset:0;background:var(--red);border-radius:12px;display:flex;align-items:center;justify-content:flex-end;padding-right:1.2rem;color:white;font-size:0.8rem;font-weight:600;letter-spacing:0.05em;opacity:0;transition:opacity 0.15s;}
+.batch-item{background:var(--bg2);border-radius:12px;padding:0.8rem 1rem;position:relative;touch-action:pan-y;transition:transform 0.25s ease;will-change:transform;margin-bottom:0;}
+.batch-item.swiping{transition:none;}
+.batch-item.swipe-out{transform:translateX(-100%) !important;transition:transform 0.28s ease;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-bg-char">김치</div>
+  <span class="hero-emoji">🥬</span>
+  <h1>KIMCHI<span>KALKYLATOR</span></h1>
+  <p class="hero-sub">Maangchi's klassiska recept · Skalbart</p>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showPage('recept',this)">
+    <span class="tab-icon">📋</span>RECEPT
+  </button>
+  <button class="tab-btn" onclick="showPage('praktiskt',this)">
+    <span class="tab-icon">✅</span>PRAKTISKT
+  </button>
+</nav>
+
+<!-- ═══════════ PAGE: RECEPT ═══════════ -->
+<div class="page active" id="page-recept">
+<div class="container">
+
+  <div class="section-label">Visste du?</div>
+  <div class="fact-card" id="factCard" onclick="nextFact()">
+    <div class="fact-eyebrow">Kimchi-fakta</div>
+    <div class="fact-text" id="factText"></div>
+    <div class="fact-tap">Tryck för ny fakta →</div>
+  </div>
+
+  <div class="section-label">Receptskala</div>
+  <div class="slider-card">
+    <div class="kg-row">
+      <span class="kg-big" id="kgDisplay">2,7</span>
+      <span class="kg-unit">kg kål</span>
+      <span class="yield-pill" id="yieldPill">≈ 3,6 kg kimchi</span>
+    </div>
+    <input type="range" id="kgSlider" min="0.5" max="10" step="0.1" value="2.7">
+    <div class="slider-ticks"><span>0,5</span><span>3</span><span>5</span><span>8</span><span>10 kg</span></div>
+    <div class="manual-row">
+      <span>Exakt:</span>
+      <input type="number" id="manualInput" min="0.1" max="30" step="0.1" placeholder="2,7">
+      <span>kg kål</span>
+    </div>
+    <div class="sync-banner" id="syncBanner">
+      <span class="sync-dot"></span>
+      <span id="syncBannerText">Synkat från saltkalkylatorn</span>
+    </div>
+    <div class="saved-recipes-row" id="savedRecipesRow"></div>
+    <button class="save-recipe-btn" onclick="openSaveModal()">💾 Spara nuvarande recept</button>
+  </div>
+
+  <div class="section-label">Saltning av kål</div>
+  <div class="card">
+    <div class="toggle-row">
+      <button class="toggle-btn active" id="btn-torr" onclick="setSaltMode('torr')">Torr saltning</button>
+      <button class="toggle-btn" id="btn-brine" onclick="setSaltMode('brine')">Brine (lag)</button>
+    </div>
+    <div class="mode-desc" id="md-torr">Gnid in salt direkt på kålen. Andel: <strong>2,5% av kålvikten</strong>.</div>
+    <div class="mode-desc hidden" id="md-brine">Saltlake: <strong>5% salt av vattenvikten</strong>. Vatten = 1,5× kålvikten.</div>
+    <div id="bowl-list"></div>
+    <button class="add-bowl" onclick="addBowl()">+ Lägg till skål</button>
+    <div class="salt-total" id="salt-total"></div>
+    <button class="sync-btn" id="syncBtn" onclick="syncToRecipe()">↑ Synka total kålvikt till receptet</button>
+  </div>
+
+  <div class="section-label">Rismjölsvälling</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Vatten</span><span class="ing-val" id="i-vatten">5,0 dl</span></div>
+    <div class="ing-row"><span class="ing-name">Glutinöst rismjöl</span><span class="ing-val" id="i-rismjol">2,0 msk</span></div>
+    <div class="ing-row"><span class="ing-name">Råsocker</span><span class="ing-val" id="i-socker">2,0 msk</span></div>
+  </div>
+
+  <div class="section-label">Grönsaker</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Koreansk rättika / daikon <span class="tag">tändstickor</span></span><span class="ing-val" id="i-rattika">250 g</span></div>
+    <div class="ing-row"><span class="ing-name">Morot, medium <span class="tag">tändstickor</span></span><span class="ing-val" id="i-morot">1½ st</span></div>
+    <div class="ing-row"><span class="ing-name">Salladslök, hackad</span><span class="ing-val" id="i-lok">7–8 st</span></div>
+    <div class="ing-row"><span class="ing-name">Koreansk gräslök (buchu)<span class="opt-line">Valfritt — ersätt med 3 salladslökar</span></span><span class="ing-val" id="i-graslok">100 g</span></div>
+    <div class="ing-row"><span class="ing-name">Vattenpeppar (minari)<span class="opt-line">Valfritt</span></span><span class="ing-val" id="i-minari">80 g</span></div>
+  </div>
+
+  <div class="section-label">Kryddor &amp; smaksättning</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Vitlöksklyftor, pressade</span><span class="ing-val" id="i-vitlok">24 st</span></div>
+    <div class="ing-row"><span class="ing-name">Ingefära, riven</span><span class="ing-val" id="i-ingefara">2,0 tsk</span></div>
+    <div class="ing-row"><span class="ing-name">Gul lök, finhackad</span><span class="ing-val" id="i-gullok">1 st</span></div>
+    <div class="ing-row"><span class="ing-name">Fisksås</span><span class="ing-val" id="i-fisksas">1,2 dl</span></div>
+    <div class="ing-row"><span class="ing-name">Saeujeot (fermenterade räkor) med lag</span><span class="ing-val" id="i-rakor">60 g</span></div>
+    <div class="ing-row"><span class="ing-name">Gochugaru (koreansk chiliflakes)</span><span class="ing-val" id="i-chili">200 g</span></div>
+  </div>
+
+  <div class="section-label">Steg för steg</div>
+  <div class="steps-card">
+
+    <div class="step-row" id="step-1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Förbered kålen <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~20 min</span></div>
+        <div class="step-desc">Dela kålen på längden, skär i 4–5 cm bitar. Lägg i en stor bunke. Väg upp saltet.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(1)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Salta kålen — omgång 1 <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~5 min + 1 tim vila</span></div>
+        <div class="step-desc">Torr saltning: gnid in hälften av saltet lager för lager med händerna. Brine: lös upp allt salt i vattnet, häll över kålen. Kålen ska precis täckas.</div>
+        <div class="timer-btn" id="tbtn-2" onclick="startTimer(2,60,'Saltning — omgång 1')">⏱ 1 timme</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(2)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Vänd kålen — omgång 2 <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~5 min + 1 tim vila</span></div>
+        <div class="step-desc">Torr saltning: vänd och gnid in resten av saltet. Brine: vänd bara runt kålen. Kålen ska börja mjukna och ge ifrån sig vätska.</div>
+        <div class="timer-btn" id="tbtn-3" onclick="startTimer(3,60,'Saltning — omgång 2')">⏱ 1 timme</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(3)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-4">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Skölj, smaka, pressa <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~15 min</span></div>
+        <div class="step-desc">Skölj kålen 2–3 gånger i kallt vatten. Smaka ett blad — det ska vara lätt salt, inte mer. Pressa ur allt vatten ordentligt med händerna och lägg åt sidan.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(4)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-5">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Koka rismjölsvälling <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~15 min inkl. svalning</span></div>
+        <div class="step-desc">Vispa ihop vatten och rismjöl i en kastrull. Koka på medelvärme under konstant omrörning tills det tjocknar som en lös gröt (~3–5 min). Tillsätt socker, rör om. Låt svalna till rumstemperatur — häll upp i en stor skål.</div>
+        <div class="timer-btn" id="tbtn-5" onclick="startTimer(5,15,'Välling kokas + svalnar')">⏱ 15 min</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(5)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-6">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Förbered grönsaker & kryddor <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~20 min</span></div>
+        <div class="step-desc">Skär rättika och morot i tändstickor (0,5 × 5 cm). Hacka salladslök i 3 cm bitar. Pressa vitlök, riv ingefära, hacka löken fint. Gör detta medan vällingen svalnar — parallell tidsanvändning!</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(6)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-7">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">Blanda kimchipasta <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~10 min</span></div>
+        <div class="step-desc">I den stora skålen med välling: tillsätt vitlök, ingefära, lök, fisksås och saeujeot — rör ihop. Tillsätt gochugaru lite i taget och blanda tills en jämn röd pasta. Vänd sedan i rättika, morot, salladslök och eventuell gräslök/minari.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(7)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-8">
+      <div class="step-num">8</div>
+      <div class="step-body">
+        <div class="step-title">Blanda kål och pasta <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~15 min</span></div>
+        <div class="step-desc">Ta på handskar — gochugaru färgar händerna rött. Lägg ner kålen i pastan portionsvis. Bred pastan in mellan varje blad och blanda noga tills allt är täckt av rött. Smaka — justera med mer fisksås (salt) eller gochugaru (styrka).</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(8)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-9">
+      <div class="step-num">9</div>
+      <div class="step-body">
+        <div class="step-title">Packa i burkar <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~10 min</span></div>
+        <div class="step-desc">Packa kimchin tätt i rena burkar — pressa ner så vätskan stiger upp och täcker kålen. Lämna 3–4 cm luft i toppen (kimchin expanderar under fermentering). Sätt på locket löst första dygnet.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(9)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-10">
+      <div class="step-num">10</div>
+      <div class="step-body">
+        <div class="step-title">Fermentera — dag 1 <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">rumstemperatur</span></div>
+        <div class="step-desc">Låt stå i rumstemperatur (18–22°C). Tryck ner kålen med en sked varje dag så den täcks av lag. Varmare = snabbare fermentering. Börja smaka från dag 2.</div>
+        <div class="timer-btn" id="tbtn-10" onclick="startTimer(10,1440,'Fermentering dag 1')">⏱ 24 timmar</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(10)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-11">
+      <div class="step-num">11</div>
+      <div class="step-body">
+        <div class="step-title">Smaka av dagligen <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">dag 2–5</span></div>
+        <div class="step-desc">Smaka en bit varje dag. Klar när den är lagom syrlig och bubblig för din smak — vanligtvis dag 2–4 i rumstemperatur. Syrare = mer fermenterad. Flytta till kyl när du är nöjd.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(11)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-12">
+      <div class="step-num">12</div>
+      <div class="step-body">
+        <div class="step-title">Flytta till kyl</div>
+        <div class="step-desc">Ställ in i kyl (2–5°C). Fermentering fortsätter mycket långsamt. Kimchin håller sig i månader och fördjupar sin smak med tiden. Bäst efter 1–2 veckor i kyl.</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(12)">✓</button>
+    </div>
+
+  </div>
+
+  <button class="export-btn" onclick="exportRecipe()">📋 KOPIERA RECEPT SOM TEXT</button>
+  <div class="note"><strong>Tips</strong>Grundrecept för 2,7 kg kål ger ca 3,6 kg kimchi. Salt = 2,5% av kålvikten. Fermentera 1–5 dagar i rumstemperatur.</div>
+  <footer>Recept: Maangchi · Omräknat till svenska mått</footer>
+</div>
+</div><!-- /page-recept -->
+
+<!-- ═══════════ PAGE: PRAKTISKT ═══════════ -->
+<div class="page" id="page-praktiskt">
+<div class="container">
+
+  <!-- DAGBOK -->
+  <div class="section-label">Fermenterings­dagbok</div>
+  <div class="prak-card">
+    <div class="dagbok-header">
+      <h3>Mina satser</h3>
+      <button class="new-batch-btn" onclick="openNewBatch()">+ Ny sats</button>
+    </div>
+    <div id="batch-list"><div class="batch-empty">Inga satser ännu. Tryck "+ Ny sats" för att logga din kimchi!</div></div>
+  </div>
+
+  <!-- INKÖPSLISTA -->
+  <div class="section-label">Inköpslista</div>
+  <div class="prak-card">
+    <button class="inkop-prefill-btn" onclick="prefillInkop()">📋 Fyll i från receptet automatiskt</button>
+    <div class="inkop-add-row">
+      <input class="inkop-input" type="text" id="inkopInput" placeholder="Lägg till vara..." onkeydown="if(event.key==='Enter')addInkopItem()">
+      <button class="inkop-add-btn" onclick="addInkopItem()">+</button>
+    </div>
+    <div id="inkop-list"></div>
+    <button class="inkop-clear" onclick="clearChecked()">Rensa bockat</button>
+  </div>
+
+  <!-- STATISTIK -->
+  <div class="section-label">Statistik</div>
+  <div class="prak-card">
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-box"><div class="stat-val" id="stat-total">0</div><div class="stat-label">Satser totalt</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-kg">0</div><div class="stat-label">Kg kimchi gjord</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-fermenting">0</div><div class="stat-label">Fermenterar nu</div></div>
+      <div class="stat-box"><div class="stat-val" id="stat-avg">—</div><div class="stat-label">Snittbetyg 🌶️</div></div>
+      <div class="stat-box wide" id="stat-best-box" style="display:none"><div class="stat-label">Bästa sats</div><div class="best-batch" id="stat-best"></div></div>
+    </div>
+  </div>
+
+  <footer>Dagboken och inköpslistan sparas lokalt i din webbläsare.</footer>
+</div>
+</div><!-- /page-praktiskt -->
+
+<!-- TIMER OVERLAY -->
+<div class="timer-overlay" id="timerOverlay">
+  <div class="t-label" id="t-label">Timer</div>
+  <div class="t-time" id="t-time">00:00</div>
+  <button class="t-stop" onclick="stopTimer()">Avbryt</button>
+</div>
+
+<!-- SAVE RECIPE MODAL -->
+<div class="save-modal-bg" id="saveModal" onclick="if(event.target===this)closeSaveModal()">
+  <div class="save-modal">
+    <h3>Spara recept</h3>
+    <div class="save-modal-info">Sparar <span id="saveModalKg"></span> kg kål · <span id="saveModalSalt"></span></div>
+    <div class="modal-field">
+      <label style="display:block;font-size:0.76rem;font-weight:600;color:var(--cream3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;">Namn</label>
+      <input class="modal-input" type="text" id="saveRecipeName" placeholder="t.ex. Elias 4kg kimchi" onkeydown="if(event.key==='Enter')doSaveRecipe()">
+    </div>
+    <div class="modal-btns" style="display:flex;gap:0.5rem;margin-top:1rem;">
+      <button class="modal-cancel" onclick="closeSaveModal()">Avbryt</button>
+      <button class="modal-save" onclick="doSaveRecipe()">Spara</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW BATCH MODAL -->
+<div class="modal-bg" id="batchModal">
+  <div class="modal">
+    <h3>Logga ny kimchisats</h3>
+    <div class="modal-field">
+      <label>Namn</label>
+      <input class="modal-input" type="text" id="batchName" placeholder="t.ex. Klassisk kimchi #3">
+    </div>
+    <div class="modal-field">
+      <label>Datum inlagd</label>
+      <input class="modal-input" type="date" id="batchDate">
+    </div>
+    <div class="modal-field">
+      <label>Kålvikt</label>
+      <input class="modal-input" type="text" id="batchKg" placeholder="t.ex. 2,7 kg">
+    </div>
+    <div class="modal-field">
+      <label>Anteckning (valfritt)</label>
+      <input class="modal-input" type="text" id="batchNote" placeholder="t.ex. Extra gochugaru">
+    </div>
+    <div class="modal-field">
+      <label>Betyg (valfritt)</label>
+      <div class="star-row" id="modalStars">
+        <span class="star" onclick="setModalRating(1)">🌶️</span>
+        <span class="star" onclick="setModalRating(2)">🌶️</span>
+        <span class="star" onclick="setModalRating(3)">🌶️</span>
+        <span class="star" onclick="setModalRating(4)">🌶️</span>
+        <span class="star" onclick="setModalRating(5)">🌶️</span>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Fotolänk (valfritt)</label>
+      <input class="modal-input" type="url" id="batchPhoto" placeholder="https://...">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeBatchModal()">Avbryt</button>
+      <button class="modal-save" onclick="saveBatch()">Spara sats</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CORE DATA ──────────────────────────────────────────────────
+var BASE=2.7;
+var ings=[
+  {id:'i-vatten',  kid:'k-vatten',  base:5,   unit:'dl',      type:'vol'},
+  {id:'i-rismjol', kid:'k-rismjol', base:2,   unit:'msk',     type:'spoon'},
+  {id:'i-socker',  kid:'k-socker',  base:2,   unit:'msk',     type:'spoon'},
+  {id:'i-rattika', kid:'k-rattika', base:250, unit:'g',       type:'wt'},
+  {id:'i-morot',   kid:'k-morot',   base:1.5, unit:'st',      type:'cnt'},
+  {id:'i-graslok', kid:null,        base:100, unit:'g',       type:'wt'},
+  {id:'i-minari',  kid:null,        base:80,  unit:'g',       type:'wt'},
+  {id:'i-vitlok',  kid:'k-vitlok',  base:24,  unit:'klyftor', type:'clove'},
+  {id:'i-ingefara',kid:'k-ingefara',base:10,  unit:'g',       type:'wt'},
+  {id:'i-gullok',  kid:'k-gullok',  base:1,   unit:'st',      type:'cnt'},
+  {id:'i-fisksas', kid:'k-fisksas', base:1.2, unit:'dl',      type:'vol'},
+  {id:'i-rakor',   kid:'k-rakor',   base:60,  unit:'g',       type:'wt'},
+  {id:'i-chili',   kid:'k-chili',   base:200, unit:'g',       type:'wt'}
+];
+
+function fmt(val,unit,type){
+  if(type==='clove') return Math.max(1,Math.round(val))+' st';
+  if(type==='cnt'){var h=Math.max(0.5,Math.round(val*2)/2);return h===Math.floor(h)?h+' st':Math.floor(h)+'½ st';}
+  if(type==='wt'){if(val>=1000)return (val/1000).toFixed(1).replace('.',',')+' kg';return Math.round(val)+' g';}
+  if(type==='vol'){if(val<0.4){var t=val*100/5;return t<3?t.toFixed(1).replace('.',',')+' tsk':Math.round(t/3)+' msk';}return val.toFixed(1).replace('.',',')+' dl';}
+  if(type==='spoon'){if(val<0.5)return (val*3).toFixed(1).replace('.',',')+' tsk';if(val<1)return '1 tsk';return val.toFixed(1).replace('.',',')+' '+unit;}
+}
+
+function update(kg){
+  var r=kg/BASE;
+  document.getElementById('kgDisplay').textContent=kg.toFixed(1).replace('.',',');
+  document.getElementById('yieldPill').textContent='≈ '+(kg*1.33).toFixed(1).replace('.',',')+' kg kimchi';
+  var lo=Math.max(1,Math.round(7.5*r-0.5)),hi=Math.max(1,Math.round(7.5*r+0.5));
+  var lokStr=lo===hi?lo+' st':lo+'–'+hi+' st';
+  document.getElementById('i-lok').textContent=lokStr;
+  if(document.getElementById('k-lok')) document.getElementById('k-lok').textContent=lokStr;
+  for(var i=0;i<ings.length;i++){
+    var v=fmt(ings[i].base*r,ings[i].unit,ings[i].type);
+    var el=document.getElementById(ings[i].id);if(el)el.textContent=v;
+    if(ings[i].kid){var kel=document.getElementById(ings[i].kid);if(kel)kel.textContent=v;}
+  }
+  document.getElementById('manualInput').value=kg.toFixed(1);
+  updateInkopAmounts();
+}
+
+var slider=document.getElementById('kgSlider');
+slider.addEventListener('input',function(){update(parseFloat(slider.value));});
+document.getElementById('manualInput').addEventListener('input',function(){var v=parseFloat(this.value);if(!isNaN(v)&&v>0&&v<=30){if(v<=10)slider.value=v;update(v);}});
+document.getElementById('manualInput').addEventListener('change',function(){var v=parseFloat(this.value);if(!isNaN(v)&&v>0){if(v<=10)slider.value=Math.min(v,10);update(v);}});
+
+// ── TABS ──────────────────────────────────────────────────────
+function showPage(name,btn){
+  var pages=document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++) pages[i].className='page';
+  document.getElementById('page-'+name).className='page active';
+  var btns=document.querySelectorAll('.tab-btn');
+  for(var j=0;j<btns.length;j++) btns[j].className='tab-btn';
+  btn.className='tab-btn active';
+  window.scrollTo(0,0);
+}
+
+// ── SALT ──────────────────────────────────────────────────────
+var saltMode='torr',bowls=[],bowlCtr=0;
+function setSaltMode(m){
+  saltMode=m;
+  document.getElementById('btn-torr').className='toggle-btn'+(m==='torr'?' active':'');
+  document.getElementById('btn-brine').className='toggle-btn'+(m==='brine'?' active':'');
+  document.getElementById('md-torr').className='mode-desc'+(m==='torr'?'':' hidden');
+  document.getElementById('md-brine').className='mode-desc'+(m==='brine'?'':' hidden');
+  for(var i=0;i<bowls.length;i++)updateBowlRes(bowls[i].id);
+  updateTotal();
+}
+function addBowl(){
+  bowlCtr++;bowls.push({id:bowlCtr,g:'',name:'Skål '+(bowls.length+1)});
+  renderBowls();
+  setTimeout(function(){var inp=document.getElementById('bg-'+bowlCtr);if(inp)inp.focus();},40);
+}
+function removeBowl(id){bowls=bowls.filter(function(b){return b.id!==id;});renderBowls();}
+function bowlChanged(id,v){for(var i=0;i<bowls.length;i++)if(bowls[i].id===id){bowls[i].g=v;break;}updateBowlRes(id);updateTotal();}
+function nameChanged(id,v){for(var i=0;i<bowls.length;i++)if(bowls[i].id===id){bowls[i].name=v;break;}}
+function calcBowl(g){
+  var ok=!isNaN(g)&&g>0,saltG=0,waterG=0,txt='';
+  if(ok){if(saltMode==='torr'){saltG=g*0.025;txt=Math.round(saltG)+' g salt';}else{waterG=g*1.5;saltG=waterG*0.05;txt=Math.round(saltG)+' g salt + '+(Math.round(waterG/10)/10).toString().replace('.',',')+' dl vatten';}}
+  return{ok:ok,saltG:saltG,waterG:waterG,txt:txt};
+}
+function updateBowlRes(id){
+  var b=null;for(var i=0;i<bowls.length;i++)if(bowls[i].id===id){b=bowls[i];break;}
+  if(!b)return;var res=calcBowl(parseFloat(b.g));var el=document.getElementById('br-'+id);if(!el)return;
+  el.className='bowl-res'+(res.ok?'':' empty');el.textContent=res.ok?res.txt:'—';
+}
+function updateTotal(){
+  var tK=0,tS=0,tW=0;
+  for(var i=0;i<bowls.length;i++){var res=calcBowl(parseFloat(bowls[i].g));if(res.ok){tK+=parseFloat(bowls[i].g);tS+=res.saltG;tW+=res.waterG;}}
+  var el=document.getElementById('salt-total'),sb=document.getElementById('syncBtn');
+  if(!bowls.length){el.innerHTML='';sb.className='sync-btn';return;}
+  if(tK>0){
+    var ks=tK>=1000?(tK/1000).toFixed(1).replace('.',',')+' kg':Math.round(tK)+' g';
+    var sv=saltMode==='torr'?Math.round(tS)+' g salt':Math.round(tS)+' g salt · '+(Math.round(tW/10)/10).toString().replace('.',',')+' dl vatten';
+    el.innerHTML='<span>Totalt '+ks+' kål</span><span class="t-val">'+sv+'</span>';
+    sb.className='sync-btn visible';
+  }else{el.innerHTML='<span>Ange gram kål i skålarna</span><span></span>';sb.className='sync-btn';}
+}
+function renderBowls(){
+  var list=document.getElementById('bowl-list'),h='';
+  for(var i=0;i<bowls.length;i++){
+    var b=bowls[i],res=calcBowl(parseFloat(b.g)),nm=b.name||('Skål '+(i+1));
+    h+='<div class="bowl-row">';
+    h+='<input class="bowl-name" type="text" id="bn-'+b.id+'" value="'+nm+'" placeholder="Skål '+(i+1)+'" oninput="nameChanged('+b.id+',this.value)">';
+    h+='<div class="bowl-g-wrap"><input class="bowl-g" type="number" id="bg-'+b.id+'" placeholder="gram" min="1" max="9999" value="'+(b.g||'')+'" oninput="bowlChanged('+b.id+',this.value)"><span class="bowl-g-unit">g kål</span></div>';
+    h+='<span class="bowl-res'+(res.ok?'':' empty')+'" id="br-'+b.id+'">'+(res.ok?res.txt:'—')+'</span>';
+    h+='<button class="bowl-del" onclick="removeBowl('+b.id+')" title="Ta bort">✕</button></div>';
+  }
+  list.innerHTML=h;updateTotal();
+}
+function syncToRecipe(){
+  var t=0;for(var i=0;i<bowls.length;i++){var g=parseFloat(bowls[i].g);if(!isNaN(g)&&g>0)t+=g;}
+  if(!t)return;var kg=t/1000;if(kg<=10)slider.value=kg;update(kg);
+  var bn=document.getElementById('syncBanner');document.getElementById('syncBannerText').textContent='Synkat: '+kg.toFixed(1).replace('.',',')+' kg kål';
+  bn.className='sync-banner visible';setTimeout(function(){bn.className='sync-banner';},3000);
+}
+
+// ── STEPS ─────────────────────────────────────────────────────
+var doneSteps={};
+function toggleStep(n){doneSteps[n]=!doneSteps[n];var row=document.getElementById('step-'+n);if(row)row.className='step-row'+(doneSteps[n]?' done':'');}
+
+// ── TIMER (bakgrundssäker) ─────────────────────────────────────
+// Sparar starttid i localStorage så timern stämmer även efter skärmlås
+var timerIv = null, activeStep = null;
+
+function startTimer(step, mins, label) {
+  stopTimer();
+  var endTime = Date.now() + mins * 60 * 1000;
+  localStorage.setItem('kimchi_timer', JSON.stringify({ endTime: endTime, label: label, step: step }));
+  activeStep = step;
+  var b = document.getElementById('tbtn-' + step);
+  if (b) b.className = 'timer-btn running';
+  document.getElementById('t-label').textContent = label;
+  document.getElementById('timerOverlay').className = 'timer-overlay visible';
+  timerIv = setInterval(tickTimer, 500);
+  tickTimer();
+}
+
+function tickTimer() {
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem('kimchi_timer')); } catch(e) {}
+  if (!saved) { stopTimer(); return; }
+  var remaining = Math.max(0, Math.floor((saved.endTime - Date.now()) / 1000));
+  if (remaining <= 0) {
+    localStorage.removeItem('kimchi_timer');
+    clearInterval(timerIv); timerIv = null;
+    var td = document.getElementById('t-time');
+    td.textContent = 'KLAR! ✓'; td.className = 't-time';
+    var b = document.getElementById('tbtn-' + saved.step);
+    if (b) { b.className = 'timer-btn done'; b.textContent = '✓ Klar'; }
+    // Try vibrate on mobile
+    if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+    return;
+  }
+  var h = Math.floor(remaining / 3600);
+  var m = Math.floor((remaining % 3600) / 60);
+  var s = remaining % 60;
+  var str = h > 0 ? h + ':' + pad(m) + ':' + pad(s) : pad(m) + ':' + pad(s);
+  var td = document.getElementById('t-time');
+  td.textContent = str;
+  td.className = 't-time' + (remaining < 60 ? ' urgent' : '');
+  document.getElementById('t-label').textContent = saved.label;
+}
+
+function stopTimer() {
+  if (timerIv) { clearInterval(timerIv); timerIv = null; }
+  localStorage.removeItem('kimchi_timer');
+  document.getElementById('timerOverlay').className = 'timer-overlay';
+  if (activeStep !== null) {
+    var b = document.getElementById('tbtn-' + activeStep);
+    if (b && b.className.indexOf('done') === -1) b.className = 'timer-btn';
+    activeStep = null;
+  }
+}
+
+function resumeTimerIfActive() {
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem('kimchi_timer')); } catch(e) {}
+  if (!saved) return;
+  var remaining = Math.floor((saved.endTime - Date.now()) / 1000);
+  if (remaining <= 0) { localStorage.removeItem('kimchi_timer'); return; }
+  // Resume
+  activeStep = saved.step;
+  var b = document.getElementById('tbtn-' + saved.step);
+  if (b) b.className = 'timer-btn running';
+  document.getElementById('t-label').textContent = saved.label;
+  document.getElementById('timerOverlay').className = 'timer-overlay visible';
+  timerIv = setInterval(tickTimer, 500);
+  tickTimer();
+}
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+// ── EXPORT ────────────────────────────────────────────────────
+function exportRecipe(){
+  var kg=parseFloat(document.getElementById('kgDisplay').textContent.replace(',','.'));
+  var r=kg/BASE,L=[];
+  L.push('KIMCHI — '+kg.toFixed(1).replace('.',',')+' kg kål');
+  L.push('Ger ca '+(kg*1.33).toFixed(1).replace('.',',')+' kg kimchi\n');
+  L.push('SALTNING');
+  var hb=false;
+  for(var i=0;i<bowls.length;i++){var bg=parseFloat(bowls[i].g);if(!isNaN(bg)&&bg>0){hb=true;var br=calcBowl(bg);L.push('  '+(bowls[i].name||'Skål '+(i+1))+': '+Math.round(bg)+' g kål → '+br.txt);}}
+  if(!hb)L.push('  Torr saltning: 2,5% av kålvikten');
+  L.push('\nRISMJÖLSVÄLLING');
+  L.push('  Vatten: '+fmt(5*r,'dl','vol'));L.push('  Glutinöst rismjöl: '+fmt(2*r,'msk','spoon'));L.push('  Socker: '+fmt(2*r,'msk','spoon'));
+  L.push('\nGRÖNSAKER');
+  L.push('  Rättika: '+fmt(250*r,'g','wt'));L.push('  Morot: '+fmt(1.5*r,'st','cnt'));
+  var lo=Math.max(1,Math.round(7.5*r-0.5)),hi=Math.max(1,Math.round(7.5*r+0.5));
+  L.push('  Salladslök: '+(lo===hi?lo:lo+'–'+hi)+' st');
+  L.push('  Koreansk gräslök (valfritt): '+fmt(100*r,'g','wt'));L.push('  Vattenpeppar (valfritt): '+fmt(80*r,'g','wt'));
+  L.push('\nKRYDDOR');
+  L.push('  Vitlök: '+Math.max(1,Math.round(24*r))+' klyftor');L.push('  Ingefära: '+fmt(2*r,'tsk','spoon'));
+  L.push('  Gul lök: '+Math.max(1,Math.round(r))+' st');L.push('  Fisksås: '+fmt(1.2*r,'dl','vol'));
+  L.push('  Saeujeot: '+fmt(60*r,'g','wt'));L.push('  Gochugaru: '+fmt(200*r,'g','wt'));
+  var txt=L.join('\n'),btn=document.querySelector('.export-btn');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){btn.textContent='✓ KOPIERAT!';setTimeout(function(){btn.textContent='📋 KOPIERA RECEPT SOM TEXT';},2000);});}
+  else{var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ KOPIERAT!';setTimeout(function(){btn.textContent='📋 KOPIERA RECEPT SOM TEXT';},2000);}
+}
+
+// ── DAGBOK ────────────────────────────────────────────────────
+var batches = [];
+var modalRating = 0;
+
+function loadBatches() {
+  try { var s = localStorage.getItem('kimchi_batches'); if(s) batches = JSON.parse(s); } catch(e){}
+}
+function saveBatches() {
+  try { localStorage.setItem('kimchi_batches', JSON.stringify(batches)); } catch(e){}
+}
+
+function setModalRating(n) {
+  modalRating = n;
+  var stars = document.getElementById('modalStars').querySelectorAll('.star');
+  for(var i=0; i<stars.length; i++) stars[i].className = 'star' + (i < n ? ' lit' : '');
+}
+
+function openNewBatch() {
+  modalRating = 0;
+  document.getElementById('batchName').value = '';
+  document.getElementById('batchDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('batchKg').value = document.getElementById('kgDisplay').textContent + ' kg';
+  document.getElementById('batchNote').value = '';
+  document.getElementById('batchPhoto').value = '';
+  var stars = document.getElementById('modalStars').querySelectorAll('.star');
+  for(var i=0; i<stars.length; i++) stars[i].className = 'star';
+  document.getElementById('batchModal').className = 'modal-bg visible';
+  setTimeout(function(){ document.getElementById('batchName').focus(); }, 100);
+}
+
+function closeBatchModal() { document.getElementById('batchModal').className = 'modal-bg'; }
+
+function saveBatch() {
+  var name = document.getElementById('batchName').value.trim() || 'Kimchi';
+  var date = document.getElementById('batchDate').value;
+  var kgRaw = document.getElementById('batchKg').value.trim();
+  var note = document.getElementById('batchNote').value.trim();
+  var photo = document.getElementById('batchPhoto').value.trim();
+  // parse kg number from string like "2,7 kg"
+  var kgNum = parseFloat(kgRaw.replace(',','.')) || 0;
+  batches.unshift({ id: Date.now(), name: name, date: date, kg: kgRaw, kgNum: kgNum, note: note, photo: photo, rating: modalRating, inKyl: false });
+  saveBatches();
+  closeBatchModal();
+  renderBatches();
+  renderStats();
+}
+
+function deleteBatch(id) {
+  batches = batches.filter(function(b){ return b.id !== id; });
+  saveBatches(); renderBatches(); renderStats();
+}
+
+function moveToKyl(id) {
+  for(var i=0; i<batches.length; i++) if(batches[i].id===id){ batches[i].inKyl=true; break; }
+  saveBatches(); renderBatches(); renderStats();
+}
+
+function rateBatch(id, n) {
+  for(var i=0; i<batches.length; i++) if(batches[i].id===id){ batches[i].rating=n; break; }
+  saveBatches(); renderBatches(); renderStats();
+}
+
+function daysSince(dateStr) {
+  return Math.floor((new Date() - new Date(dateStr)) / 86400000);
+}
+
+function getRipeness(days, inKyl) {
+  // After moving to fridge, fermentation stops — show final state
+  if (inKyl) {
+    return { pct: 100, color: '#2a7a48', stage: '🥬 I kyl — mognar långsamt', tip: 'Förvaras i kyl' };
+  }
+  // 0 days
+  if (days === 0) return { pct: 2,  color: '#c4a882', stage: '🥬 Precis inlagd', tip: 'Fermentering startar' };
+  // 0–1 day: rå
+  if (days < 1)   return { pct: 8,  color: '#c4a882', stage: '🥬 Rå', tip: 'Knappt börjat' };
+  if (days < 2)   return { pct: 22, color: '#c47d0a', stage: '🟡 Börjar jäsa', tip: 'Bubblar lite' };
+  if (days < 3)   return { pct: 42, color: '#c47d0a', stage: '🟠 Halvfärdig', tip: 'Smaka av — lite syrlig' };
+  if (days < 4)   return { pct: 62, color: '#d95f1a', stage: '🔶 Nästan perfekt', tip: 'Smaka dagligen nu' };
+  if (days < 5)   return { pct: 80, color: '#c8271c', stage: '🌶️ Perfekt', tip: 'Flytta till kyl nu!' };
+  if (days < 7)   return { pct: 92, color: '#c8271c', stage: '🌶️🌶️ Stark & syrlig', tip: 'Gränsar till för syrlig' };
+  return           { pct: 100, color: '#8b0000', stage: '🌶️🌶️🌶️ Superstark!', tip: 'Flytta till kyl omedelbart' };
+}
+
+function renderBatches() {
+  var list = document.getElementById('batch-list');
+  if(!batches.length){ list.innerHTML='<div class="batch-empty">Inga satser ännu. Tryck "+ Ny sats" för att logga din kimchi!</div>'; return; }
+  var h = '';
+  for(var i=0; i<batches.length; i++) {
+    var b = batches[i], days = daysSince(b.date);
+    var pillClass = 'batch-days', pillTxt = days + ' dagar';
+    if(b.inKyl){ pillClass='batch-days done'; pillTxt='I kyl · '+days+' dagar'; }
+    else if(days<=5){ pillClass='batch-days fermenting'; pillTxt='Fermenterar · dag '+days; }
+
+    // ripeness
+    var rip = getRipeness(days, b.inKyl);
+    var meterHtml =
+      '<div class="ripeness-wrap">' +
+        '<div class="ripeness-label-row">' +
+          '<span class="ripeness-stage">'+rip.stage+'</span>' +
+          '<span class="ripeness-days-label">'+rip.tip+'</span>' +
+        '</div>' +
+        '<div class="ripeness-track">' +
+          '<div class="ripeness-fill" style="width:'+rip.pct+'%;background:'+rip.color+'"></div>' +
+        '</div>' +
+        '<div class="ripeness-markers"><span class="ripeness-marker">Rå</span><span class="ripeness-marker">Perfekt</span><span class="ripeness-marker">Superstark</span></div>' +
+      '</div>';
+
+    // stars display
+    var starsHtml = '<span class="batch-stars">';
+    for(var s=1; s<=5; s++) starsHtml += '<span style="opacity:'+(s<=(b.rating||0)?'1':'0.2')+';cursor:pointer" onclick="rateBatch('+b.id+','+s+')">🌶️</span>';
+    starsHtml += '</span>';
+
+    h += '<div class="batch-swipe-wrap" id="swrap-'+b.id+'">';
+    h += '<div class="batch-delete-bg" id="sbg-'+b.id+'">🗑 RADERA</div>';
+    h += '<div class="batch-item" id="bitem-'+b.id+'">';
+    h += '<div class="batch-top"><span class="batch-name">'+b.name+'</span><span class="batch-date">'+b.date+(b.kg?' · '+b.kg:'')+'</span></div>';
+    h += meterHtml;
+    h += '<div style="margin:0.4rem 0 0.1rem">'+starsHtml+'<span class="'+pillClass+'">'+pillTxt+'</span></div>';
+    if(b.note) h += '<div class="batch-note">'+b.note+'</div>';
+    if(b.photo) h += '<a class="batch-photo-link" href="'+b.photo+'" target="_blank">📷 Visa foto</a>';
+    if(!b.inKyl) h += '<div class="batch-actions"><button class="batch-action-btn kyl" onclick="moveToKyl('+b.id+')">✓ Flytta till kyl</button></div>';
+    h += '</div></div>'; // close batch-item + swipe-wrap
+  }
+  list.innerHTML = h;
+  for(var j=0; j<batches.length; j++) initSwipe(batches[j].id);
+}
+
+function renderStats() {
+  var total = batches.length;
+  var totalKg = 0, fermenting = 0, ratedTotal = 0, ratedCount = 0, best = null;
+  for(var i=0; i<batches.length; i++) {
+    var b = batches[i];
+    totalKg += (b.kgNum || 0) * 1.33; // yield
+    if(!b.inKyl && daysSince(b.date) <= 5) fermenting++;
+    if(b.rating) { ratedTotal += b.rating; ratedCount++; }
+    if(b.rating && (!best || b.rating > best.rating)) best = b;
+  }
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-kg').textContent = totalKg >= 1 ? totalKg.toFixed(1).replace('.',',') : Math.round(totalKg*1000)/1000 || '0';
+  document.getElementById('stat-fermenting').textContent = fermenting;
+  document.getElementById('stat-avg').textContent = ratedCount ? (ratedTotal/ratedCount).toFixed(1).replace('.',',') : '—';
+  var bestBox = document.getElementById('stat-best-box');
+  if(best) {
+    bestBox.style.display = '';
+    var stars = '';
+    for(var s=1; s<=5; s++) stars += s<=best.rating ? '🌶️' : '·';
+    document.getElementById('stat-best').innerHTML = '<span>'+best.name+'</span> · '+stars+' · '+best.date;
+  } else { bestBox.style.display = 'none'; }
+}
+
+// ── INKÖPSLISTA ────────────────────────────────────────────────
+// inkopItems: { id, text, amount, recipeKey, checked }
+// recipeKey items auto-update when recipe changes. null = manual item.
+var inkopItems=[]; var inkopCtr=0;
+
+// All recipe-linked items with their base amounts at 2.7kg
+var RECIPE_ITEMS = [
+  { key:'kal',      name:'Napakål (kinakål)',              getAmt: function(r){ return (2.7*r).toFixed(1).replace('.',',')+' kg'; } },
+  { key:'salt',     name:'Grovt salt',                     getAmt: function(r){ return Math.round(72*r)+' g'; } },
+  { key:'rismjol',  name:'Glutinöst rismjöl',              getAmt: function(r){ return fmt(2*r,'msk','spoon'); } },
+  { key:'socker',   name:'Råsocker',                       getAmt: function(r){ return fmt(2*r,'msk','spoon'); } },
+  { key:'rattika',  name:'Koreansk rättika / daikon',      getAmt: function(r){ return fmt(250*r,'g','wt'); } },
+  { key:'morot',    name:'Morot',                          getAmt: function(r){ return fmt(1.5*r,'st','cnt'); } },
+  { key:'lok',      name:'Salladslök',                     getAmt: function(r){ var lo=Math.max(1,Math.round(7.5*r-0.5)),hi=Math.max(1,Math.round(7.5*r+0.5)); return lo===hi?lo+' st':lo+'–'+hi+' st'; } },
+  { key:'graslok',  name:'Koreansk gräslök (buchu)',       getAmt: function(r){ return fmt(100*r,'g','wt'); } },
+  { key:'vitlok',   name:'Vitlök',                         getAmt: function(r){ return Math.max(1,Math.round(24*r))+' klyftor'; } },
+  { key:'ingefara', name:'Ingefära',                       getAmt: function(r){ return fmt(10*r,'g','wt'); } },
+  { key:'gullok',   name:'Gul lök',                        getAmt: function(r){ var n=r<=1.3?1:Math.round(r); return n+' st'; } },
+  { key:'fisksas',  name:'Fisksås',                        getAmt: function(r){ return fmt(1.2*r,'dl','vol'); } },
+  { key:'rakor',    name:'Saeujeot (fermenterade räkor)',  getAmt: function(r){ return fmt(60*r,'g','wt'); } },
+  { key:'chili',    name:'Gochugaru (koreansk chiliflakes)',getAmt: function(r){ return fmt(200*r,'g','wt'); } }
+];
+
+function getRecipeRatio() {
+  var kg = parseFloat(document.getElementById('kgDisplay').textContent.replace(',','.')) || 2.7;
+  return kg / 2.7;
+}
+
+function loadInkop(){
+  try{ var s=localStorage.getItem('kimchi_inkop'); if(s){ inkopItems=JSON.parse(s); inkopCtr=inkopItems.length?Math.max.apply(null,inkopItems.map(function(x){return x.id;}))+1:0; } }catch(e){}
+}
+function saveInkop(){ try{ localStorage.setItem('kimchi_inkop',JSON.stringify(inkopItems)); }catch(e){} }
+
+function prefillInkop(){
+  var r = getRecipeRatio();
+  for(var i=0; i<RECIPE_ITEMS.length; i++){
+    var ri = RECIPE_ITEMS[i];
+    // check if already exists by recipeKey
+    var exists = false;
+    for(var j=0; j<inkopItems.length; j++) if(inkopItems[j].recipeKey===ri.key){ exists=true; break; }
+    if(!exists){
+      inkopCtr++;
+      inkopItems.push({ id:inkopCtr, name:ri.name, amount:ri.getAmt(r), recipeKey:ri.key, checked:false });
+    }
+  }
+  saveInkop(); renderInkop();
+}
+
+function updateInkopAmounts(){
+  // Called whenever recipe scale changes — update all recipe-linked items
+  var r = getRecipeRatio();
+  var changed = false;
+  for(var i=0; i<inkopItems.length; i++){
+    if(inkopItems[i].recipeKey){
+      for(var j=0; j<RECIPE_ITEMS.length; j++){
+        if(RECIPE_ITEMS[j].key === inkopItems[i].recipeKey){
+          var newAmt = RECIPE_ITEMS[j].getAmt(r);
+          if(inkopItems[i].amount !== newAmt){ inkopItems[i].amount = newAmt; changed=true; }
+          break;
+        }
+      }
+    }
+  }
+  if(changed){ saveInkop(); renderInkop(); }
+}
+
+function addInkopItem(){
+  var inp=document.getElementById('inkopInput'),txt=inp.value.trim();
+  if(!txt)return;
+  inkopCtr++;
+  inkopItems.push({id:inkopCtr, name:txt, amount:'', recipeKey:null, checked:false});
+  inp.value='';
+  saveInkop(); renderInkop();
+}
+function toggleInkop(id){
+  for(var i=0;i<inkopItems.length;i++) if(inkopItems[i].id===id){inkopItems[i].checked=!inkopItems[i].checked;break;}
+  saveInkop(); renderInkop();
+}
+function deleteInkop(id){
+  inkopItems=inkopItems.filter(function(x){return x.id!==id;});
+  saveInkop(); renderInkop();
+}
+function clearChecked(){
+  inkopItems=inkopItems.filter(function(x){return !x.checked;});
+  saveInkop(); renderInkop();
+}
+function renderInkop(){
+  var list=document.getElementById('inkop-list');
+  if(!inkopItems.length){
+    list.innerHTML='<div style="font-size:0.8rem;color:var(--muted2);text-align:center;padding:0.8rem 0;font-style:italic;">Listan är tom. Tryck "Fyll i från receptet" för att komma igång.</div>';
+    return;
+  }
+  var h='';
+  for(var i=0;i<inkopItems.length;i++){
+    var it=inkopItems[i];
+    h+='<div class="inkop-item">';
+    h+='<button class="inkop-check'+(it.checked?' checked':'')+'" onclick="toggleInkop('+it.id+')">'+(it.checked?'✓':'')+'</button>';
+    // name + amount on same row, amount in red if recipe-linked
+    h+='<div style="flex:1;min-width:0;">';
+    h+='<span class="inkop-text'+(it.checked?' checked':'')+'">'+it.name+'</span>';
+    if(it.amount){
+      var amtStyle = it.recipeKey ? 'color:var(--red);font-weight:600;font-family:\'Bebas Neue\',sans-serif;font-size:1rem;letter-spacing:0.03em;' : 'color:var(--muted);';
+      var liveTag = it.recipeKey ? ' <span style="font-size:0.6rem;background:var(--red-pale);color:var(--red);border-radius:4px;padding:0.05rem 0.3rem;font-family:\'DM Sans\',sans-serif;font-weight:600;letter-spacing:0.06em;vertical-align:middle;">LIVE</span>' : '';
+      h+='<span style="display:block;'+amtStyle+'">'+it.amount+liveTag+'</span>';
+    }
+    h+='</div>';
+    h+='<button class="inkop-del" onclick="deleteInkop('+it.id+')">✕</button>';
+    h+='</div>';
+  }
+  list.innerHTML=h;
+}
+
+// ── KÖK-LÄGE ──────────────────────────────────────────────────
+var kokMode='normal';
+function setKokMode(m){
+  kokMode=m;
+  document.getElementById('kok-normal-btn').className='kok-mode-btn'+(m==='normal'?' active':'');
+  document.getElementById('kok-big-btn').className='kok-mode-btn'+(m==='big'?' active':'');
+  var view=document.getElementById('kok-view');
+  view.className=m==='big'?'kok-big':'kok-normal';
+  document.getElementById('kok-note').textContent=m==='big'?'Storbildsläge — enkel att läsa på avstånd.':'Mängderna speglar receptfliken — justera skalan där.';
+}
+
+// ── WAKELOCK ──────────────────────────────────────────────────
+var wakeLock=null;
+function toggleWakeLock(){
+  if(wakeLock){
+    wakeLock.release().catch(function(){});wakeLock=null;
+    document.getElementById('wlDot').className='wl-dot';
+    document.getElementById('wlText').textContent='Av';
+    document.getElementById('wlBtn').className='wakelock-btn';
+    document.getElementById('wlBtn').textContent='Aktivera';
+  } else if('wakeLock' in navigator){
+    navigator.wakeLock.request('screen').then(function(wl){
+      wakeLock=wl;
+      document.getElementById('wlDot').className='wl-dot on';
+      document.getElementById('wlText').textContent='På';
+      document.getElementById('wlBtn').className='wakelock-btn on';
+      document.getElementById('wlBtn').textContent='Stäng av';
+      wl.addEventListener('release',function(){
+        wakeLock=null;
+        document.getElementById('wlDot').className='wl-dot';
+        document.getElementById('wlText').textContent='Av';
+        document.getElementById('wlBtn').className='wakelock-btn';
+        document.getElementById('wlBtn').textContent='Aktivera';
+      });
+    }).catch(function(e){alert('Kunde inte aktivera: '+e.message);});
+  } else {
+    alert('Din webbläsare stöder inte Wake Lock. Prova i Safari på iOS 16.4+.');
+  }
+}
+
+// ── SPARADE RECEPT ────────────────────────────────────────────
+var savedRecipes = [];
+
+function loadSavedRecipes() {
+  try { var s = localStorage.getItem('kimchi_saved_recipes'); if(s) savedRecipes = JSON.parse(s); } catch(e) {}
+}
+function persistSavedRecipes() {
+  try { localStorage.setItem('kimchi_saved_recipes', JSON.stringify(savedRecipes)); } catch(e) {}
+}
+
+function openSaveModal() {
+  var kg = document.getElementById('kgDisplay').textContent;
+  var saltMode = document.getElementById('btn-torr').className.indexOf('active') !== -1 ? 'Torr saltning' : 'Brine';
+  document.getElementById('saveModalKg').textContent = kg;
+  document.getElementById('saveModalSalt').textContent = saltMode;
+  document.getElementById('saveRecipeName').value = kg + ' kg kimchi';
+  document.getElementById('saveModal').className = 'save-modal-bg visible';
+  setTimeout(function(){ document.getElementById('saveRecipeName').select(); }, 100);
+}
+
+function closeSaveModal() {
+  document.getElementById('saveModal').className = 'save-modal-bg';
+}
+
+function doSaveRecipe() {
+  var name = document.getElementById('saveRecipeName').value.trim();
+  if (!name) return;
+  var kg = parseFloat(document.getElementById('kgDisplay').textContent.replace(',','.'));
+  var mode = document.getElementById('btn-torr').className.indexOf('active') !== -1 ? 'torr' : 'brine';
+  savedRecipes.push({ id: Date.now(), name: name, kg: kg, saltMode: mode });
+  persistSavedRecipes();
+  closeSaveModal();
+  renderSavedRecipes();
+  // flash confirm
+  var btn = document.querySelector('.save-recipe-btn');
+  btn.textContent = '✓ Sparat!';
+  setTimeout(function(){ btn.textContent = '💾 Spara nuvarande recept'; }, 1800);
+}
+
+function loadSavedRecipe(id) {
+  for (var i = 0; i < savedRecipes.length; i++) {
+    if (savedRecipes[i].id === id) {
+      var r = savedRecipes[i];
+      var kg = r.kg;
+      var sliderEl = document.getElementById('kgSlider');
+      if (kg <= 10) sliderEl.value = kg;
+      update(kg);
+      setSaltMode(r.saltMode || 'torr');
+      // flash sync banner
+      var bn = document.getElementById('syncBanner');
+      document.getElementById('syncBannerText').textContent = 'Laddat: ' + r.name;
+      bn.className = 'sync-banner visible';
+      setTimeout(function(){ bn.className = 'sync-banner'; }, 2500);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      break;
+    }
+  }
+}
+
+function deleteSavedRecipe(id) {
+  savedRecipes = savedRecipes.filter(function(r){ return r.id !== id; });
+  persistSavedRecipes();
+  renderSavedRecipes();
+}
+
+function renderSavedRecipes() {
+  var row = document.getElementById('savedRecipesRow');
+  if (!savedRecipes.length) { row.innerHTML = ''; return; }
+  var h = '';
+  for (var i = 0; i < savedRecipes.length; i++) {
+    var r = savedRecipes[i];
+    h += '<div class="saved-recipe-chip" onclick="loadSavedRecipe(' + r.id + ')">';
+    h += r.name;
+    h += '<button class="chip-del" onclick="event.stopPropagation();deleteSavedRecipe(' + r.id + ')">✕</button>';
+    h += '</div>';
+  }
+  row.innerHTML = h;
+}
+
+// ── KIMCHI-FAKTA ──────────────────────────────────────────────
+var FACTS = [
+  'Kimchi innehåller mer C-vitamin än apelsin — och C-vitaminet ökar under fermenteringen!',
+  'Sydkoreaner äter i genomsnitt 18 kg kimchi per person och år.',
+  'Det finns över 200 officiella varianter av kimchi i Korea.',
+  'Kimchi är rikt på probiotika — en portion kan innehålla miljarder nyttiga bakterier.',
+  'Under fermenteringen sänks pH-värdet vilket konserverar kimchin naturligt utan konservationsmedel.',
+  'NASA godkände kimchi för astronauter på rymdstationer efter att ha studerat dess hållbarhet.',
+  'Kimjang — traditionen att göra kimchi inför vintern — är ett UNESCO-världsarv sedan 2013.',
+  'Den röda chilin (gochugaru) introducerades i Korea på 1600-talet via Portugal och Japan.',
+  'Kimchi var ursprungligen vit — utan chili. Den äldsta varianten är baek kimchi.',
+  'Lacto-fermentering i kimchi producerar mjölksyrabakterier som är bra för tarmfloran.',
+  'En vällagrad kimchi kan hålla sig i kyl i upp till ett år — smaken fördjupas med tiden.',
+  'Ordet kimchi kommer från det kinesiska "chimchae" som betyder "inlagda grönsaker".',
+  'Gochugaru är inte samma som vanlig chiliflakes — den har en fruktig, rökig smak utan bitterhet.',
+  'Kimchi-kylskåp (kimchi-jjigae) är en standardapparat i koreanska hem — temperaturreglerat för optimal fermentering.',
+  'Fermenterad kimchi innehåller B-vitaminer som produceras av de aktiva bakterierna.'
+];
+var factIndex = 0;
+function initFact() {
+  factIndex = Math.floor(Math.random() * FACTS.length);
+  document.getElementById('factText').textContent = FACTS[factIndex];
+}
+function nextFact() {
+  var card = document.getElementById('factCard');
+  card.style.opacity = '0';
+  card.style.transform = 'scale(0.97)';
+  card.style.transition = 'opacity 0.15s, transform 0.15s';
+  setTimeout(function() {
+    factIndex = (factIndex + 1) % FACTS.length;
+    document.getElementById('factText').textContent = FACTS[factIndex];
+    card.style.opacity = '1';
+    card.style.transform = 'scale(1)';
+  }, 150);
+}
+
+// ── SWIPE TO DELETE ────────────────────────────────────────────
+function initSwipe(id) {
+  var item = document.getElementById('bitem-'+id);
+  var bg   = document.getElementById('sbg-'+id);
+  var wrap = document.getElementById('swrap-'+id);
+  if (!item) return;
+  var startX = 0, curX = 0, dragging = false, threshold = 80;
+
+  function onStart(e) {
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    curX = 0; dragging = true;
+    item.classList.add('swiping');
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    var dx = (e.touches ? e.touches[0].clientX : e.clientX) - startX;
+    if (dx > 0) dx = 0; // only swipe left
+    curX = dx;
+    item.style.transform = 'translateX('+dx+'px)';
+    var pct = Math.min(1, Math.abs(dx) / threshold);
+    bg.style.opacity = pct;
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    item.classList.remove('swiping');
+    if (Math.abs(curX) >= threshold) {
+      item.classList.add('swipe-out');
+      setTimeout(function() { deleteBatch(id); }, 280);
+    } else {
+      item.style.transform = '';
+      bg.style.opacity = '0';
+    }
+  }
+  item.addEventListener('touchstart', onStart, { passive: true });
+  item.addEventListener('touchmove',  onMove,  { passive: true });
+  item.addEventListener('touchend',   onEnd);
+  item.addEventListener('mousedown',  onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onEnd);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+loadBatches();
+loadInkop();
+loadSavedRecipes();
+addBowl();
+update(2.7);
+renderBatches();
+renderInkop();
+renderStats();
+renderSavedRecipes();
+initFact();
+resumeTimerIfActive();
+document.getElementById('batchDate').value=new Date().toISOString().slice(0,10);
+</script>
+</body>
+</html>
