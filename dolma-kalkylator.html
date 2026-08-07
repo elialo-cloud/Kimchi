@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>🌿 Dolma</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4f7f0; --bg2:#e8f0e0; --surface:#fff; --border:#d0e0c0; --border2:#b8cca8;
+  --green:#3a7a28; --green2:#2a5c1c; --green-pale:#edf5e8;
+  --amber:#b07a0a; --amber-soft:rgba(176,122,10,0.1);
+  --red-acc:#c84020; --red-pale:#fdecea;
+  --cream:#2a3820; --cream2:#485c34; --cream3:#7a8c6a;
+  --muted:#8a9a78; --muted2:#b8c8a8;
+  --tab-h:64px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+/* ── HERO ── */
+.hero{position:relative;padding:2.8rem 1.5rem 2rem;text-align:center;overflow:hidden;background:var(--green2);}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);}
+.hero-bg-char{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);font-size:14rem;color:rgba(255,255,255,0.06);pointer-events:none;line-height:1;user-select:none;}
+.hero-emoji{font-size:2.5rem;display:block;margin-bottom:0.4rem;animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,12vw,5rem);letter-spacing:0.08em;color:#fff;line-height:0.95;}
+.hero h1 span{display:block;color:rgba(255,255,255,0.72);font-size:0.52em;letter-spacing:0.18em;}
+.hero-sub{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:0.5rem;letter-spacing:0.1em;text-transform:uppercase;}
+.hero-back{position:absolute;top:1rem;left:1rem;background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:0.35rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:rgba(255,255,255,0.8);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;}
+
+/* ── TAB BAR ── */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.2rem;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;color:var(--muted2);letter-spacing:0.04em;transition:color 0.15s;padding:0;}
+.tab-btn .tab-icon{font-size:1.3rem;line-height:1;transition:transform 0.15s;}
+.tab-btn.active{color:var(--green);}
+.tab-btn.active .tab-icon{transform:scale(1.1);}
+
+/* ── PAGES ── */
+.page{display:none;padding-bottom:calc(var(--tab-h) + 1rem);}
+.page.active{display:block;}
+.container{max-width:580px;margin:0 auto;padding:1.5rem 1rem 0;}
+
+/* ── SECTION LABELS ── */
+.section-label{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;letter-spacing:0.2em;color:var(--green);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.6rem;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent);}
+
+/* ── CARDS ── */
+.slider-card,.card,.steps-card,.prak-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.3rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(40,80,20,0.06);animation:fadeUp 0.3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.slider-card{position:relative;overflow:hidden;}
+.slider-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--green);border-radius:18px 18px 0 0;}
+
+/* SLIDER */
+.kg-row{display:flex;align-items:flex-end;gap:0.5rem;margin-bottom:1rem;}
+.kg-big{font-family:'Bebas Neue',sans-serif;font-size:4.8rem;line-height:1;color:var(--green);}
+.kg-unit{font-size:1rem;color:var(--muted);padding-bottom:0.6rem;font-weight:300;}
+.yield-pill{margin-left:auto;background:var(--green-pale);border:1px solid rgba(58,122,40,0.2);border-radius:30px;padding:0.28rem 0.8rem 0.68rem;font-size:0.74rem;color:var(--green);font-weight:500;white-space:nowrap;}
+input[type="range"]{width:100%;height:5px;border-radius:3px;background:var(--border);outline:none;appearance:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--green);box-shadow:0 2px 8px rgba(58,122,40,0.4);cursor:pointer;transition:transform 0.1s;}
+input[type="range"]::-webkit-slider-thumb:active{transform:scale(1.15);}
+.slider-ticks{display:flex;justify-content:space-between;margin-top:0.35rem;font-size:0.67rem;color:var(--muted2);}
+.manual-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.8rem;padding:0.42rem 0.72rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;}
+.manual-row span{font-size:0.76rem;color:var(--muted);white-space:nowrap;}
+#manualInput{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--cream);font-size:1rem;font-family:'DM Sans',sans-serif;width:62px;text-align:center;outline:none;padding:0.1rem;-moz-appearance:textfield;}
+#manualInput::-webkit-inner-spin-button,#manualInput::-webkit-outer-spin-button{-webkit-appearance:none;}
+
+/* saved recipes */
+.saved-recipes-row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.75rem;}
+.saved-recipe-chip{display:flex;align-items:center;gap:0.3rem;background:var(--bg2);border:1.5px solid var(--border2);border-radius:20px;padding:0.28rem 0.5rem 0.28rem 0.75rem;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:var(--cream2);cursor:pointer;transition:all 0.15s;}
+.saved-recipe-chip:hover{border-color:var(--green);color:var(--green);}
+.saved-recipe-chip .chip-del{background:none;border:none;color:var(--muted2);font-size:0.75rem;cursor:pointer;padding:0.1rem 0.15rem;line-height:1;border-radius:3px;transition:color 0.12s;}
+.chip-del:hover{color:var(--green);}
+.save-recipe-btn{margin-top:0.6rem;width:100%;padding:0.42rem;background:none;border:1.5px dashed var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.save-recipe-btn:hover{border-color:var(--amber);color:var(--amber);}
+.sync-banner{display:flex;align-items:center;gap:0.5rem;margin-top:0.65rem;padding:0.38rem 0.68rem;background:rgba(42,122,72,0.08);border:1px solid rgba(41,145,85,0.25);border-radius:8px;font-size:0.75rem;color:var(--green);opacity:0;transition:opacity 0.4s;}
+.sync-banner.visible{opacity:1;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+
+/* INGREDIENT ROWS */
+.ing-row{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border);gap:0.5rem;}
+.ing-row:last-child{border-bottom:none;}
+.ing-row:hover{background:var(--bg2);border-radius:7px;margin:0 -0.3rem;padding-left:0.3rem;padding-right:0.3rem;}
+.ing-name{font-size:0.87rem;color:var(--cream2);flex:1;line-height:1.3;}
+.ing-name .opt-line{display:block;font-size:0.68rem;color:var(--muted2);font-style:italic;margin-top:0.1rem;}
+.ing-val{font-family:'Bebas Neue',sans-serif;font-size:1.12rem;letter-spacing:0.04em;color:var(--green);white-space:nowrap;text-align:right;min-width:78px;}
+
+/* STEPS */
+.steps-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.3rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(40,80,20,0.06);}
+.step-row{display:flex;gap:0.85rem;padding:0.8rem 0;border-bottom:1px solid var(--border);position:relative;}
+.step-row:last-child{border-bottom:none;padding-bottom:0;}
+.step-num{width:27px;height:27px;border-radius:50%;background:var(--green-pale);border:1.5px solid rgba(58,122,40,0.25);color:var(--green);font-family:'Bebas Neue',sans-serif;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.05rem;transition:all 0.2s;}
+.step-row.done .step-num{background:var(--green);border-color:var(--green);color:#fff;}
+.step-body{flex:1;}
+.step-title{font-size:0.9rem;font-weight:600;color:var(--cream);margin-bottom:0.2rem;}
+.step-row.done .step-title{color:var(--muted);text-decoration:line-through;}
+.step-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;}
+.timer-btn{display:inline-flex;align-items:center;gap:0.3rem;margin-top:0.45rem;padding:0.22rem 0.6rem;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:var(--cream3);cursor:pointer;transition:all 0.15s;user-select:none;}
+.timer-btn:hover{border-color:var(--amber);color:var(--amber);}
+.timer-btn.running{background:var(--green-pale);border-color:var(--green);color:var(--green);}
+.timer-btn.done{background:rgba(42,122,72,0.1);border-color:var(--green);color:var(--green);}
+.step-check{position:absolute;right:0;top:0.8rem;width:22px;height:22px;border-radius:5px;border:1.5px solid var(--border2);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.72rem;color:transparent;transition:all 0.15s;}
+.step-check:hover{border-color:var(--green);}
+.step-row.done .step-check{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* TIMER OVERLAY */
+.timer-overlay{display:none;position:fixed;bottom:calc(var(--tab-h) + 0.8rem + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--border);border-radius:20px;padding:1rem 1.5rem;text-align:center;box-shadow:0 8px 40px rgba(40,80,20,0.18);z-index:200;min-width:230px;animation:slideUp 0.22s ease;}
+.timer-overlay.visible{display:block;}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(18px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
+.t-label{font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.2rem;}
+.t-time{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:0.05em;color:var(--cream);line-height:1;}
+.t-time.urgent{color:var(--red-acc);animation:pulse 0.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.45;}}
+.t-stop{margin-top:0.52rem;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:0.26rem 1.1rem;font-family:'DM Sans',sans-serif;font-size:0.77rem;cursor:pointer;}
+.t-stop:hover{border-color:var(--green);color:var(--green);}
+
+/* INKÖP */
+.inkop-add-row{display:flex;gap:0.5rem;margin-bottom:0.8rem;}
+.inkop-input{flex:1;padding:0.45rem 0.65rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--cream);outline:none;transition:border-color 0.15s;}
+.inkop-input:focus{border-color:var(--green);}
+.inkop-add-btn{padding:0.45rem 0.9rem;background:var(--green);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:600;cursor:pointer;}
+.inkop-prefill-btn{width:100%;margin-bottom:0.7rem;padding:0.42rem;background:none;border:1.5px dashed var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all 0.18s;}
+.inkop-prefill-btn:hover{border-color:var(--amber);color:var(--amber);}
+.inkop-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+.inkop-item:last-child{border-bottom:none;}
+.inkop-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:transparent;transition:all 0.15s;}
+.inkop-check.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.inkop-text{flex:1;font-size:0.86rem;color:var(--cream2);}
+.inkop-text.checked{text-decoration:line-through;color:var(--muted2);}
+.inkop-del{background:none;border:none;color:var(--muted2);font-size:0.85rem;cursor:pointer;line-height:1;padding:0.1rem;}
+.inkop-del:hover{color:var(--green);}
+.inkop-clear{width:100%;margin-top:0.6rem;padding:0.42rem;background:none;border:1px solid var(--border2);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.76rem;color:var(--muted);cursor:pointer;}
+.inkop-clear:hover{border-color:var(--green);color:var(--green);}
+.inkop-cat-label{font-family:'Bebas Neue',sans-serif;font-size:0.78rem;letter-spacing:0.16em;color:var(--green);margin:0.9rem 0 0.15rem;text-transform:uppercase;}
+.inkop-cat-label:first-child{margin-top:0;}
+
+/* FAKTAKORT */
+.fact-card{background:var(--green2);border-radius:18px;padding:1.2rem 1.3rem;margin-bottom:1rem;position:relative;overflow:hidden;cursor:pointer;user-select:none;animation:fadeUp 0.3s ease both;}
+.fact-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,0.06);border-radius:50%;}
+.fact-eyebrow{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.55);margin-bottom:0.4rem;}
+.fact-text{font-size:0.9rem;font-weight:500;color:#fff;line-height:1.45;position:relative;z-index:1;}
+.fact-tap{font-size:0.68rem;color:rgba(255,255,255,0.38);margin-top:0.6rem;text-align:right;}
+
+/* NOTE */
+.note{margin-top:1rem;padding:0.72rem 0.95rem;background:var(--amber-soft);border-left:2px solid var(--amber);border-radius:0 10px 10px 0;font-size:0.78rem;color:var(--cream3);line-height:1.6;}
+.note strong{display:block;color:var(--amber);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.18rem;}
+
+/* EXPORT */
+.export-btn{width:100%;padding:0.82rem;background:transparent;border:1.5px solid var(--border2);border-radius:14px;font-family:'Bebas Neue',sans-serif;font-size:1.02rem;letter-spacing:0.14em;color:var(--cream2);cursor:pointer;transition:all 0.2s;margin-top:0.5rem;}
+.export-btn:hover{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* SAVE MODAL */
+.save-modal-bg{display:none;position:fixed;inset:0;background:rgba(40,60,20,0.4);z-index:300;align-items:flex-end;justify-content:center;}
+.save-modal-bg.visible{display:flex;}
+.save-modal{background:#fff;border-radius:18px 18px 0 0;padding:1.5rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom));width:100%;max-width:580px;box-shadow:0 -8px 40px rgba(40,80,20,0.15);animation:slideUp2 0.22s ease;}
+@keyframes slideUp2{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.save-modal h3{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.12em;color:var(--cream);margin-bottom:0.9rem;}
+.save-modal-info{font-size:0.82rem;color:var(--muted);margin-bottom:0.9rem;background:var(--bg2);padding:0.55rem 0.75rem;border-radius:8px;}
+.save-modal-info span{font-weight:600;color:var(--green);}
+.modal-field label{display:block;font-size:0.76rem;font-weight:600;color:var(--cream3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.3rem;}
+.modal-input{width:100%;padding:0.5rem 0.7rem;background:var(--bg2);border:1.5px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.9rem;color:var(--cream);outline:none;transition:border-color 0.15s;}
+.modal-input:focus{border-color:var(--green);}
+.modal-btns{display:flex;gap:0.5rem;margin-top:1rem;}
+.modal-save{flex:2;padding:0.55rem;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;}
+.modal-cancel{flex:1;padding:0.55rem;background:none;color:var(--muted);border:1px solid var(--border2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.88rem;cursor:pointer;}
+
+footer{text-align:center;font-size:0.7rem;color:var(--muted2);margin-top:1.5rem;letter-spacing:0.05em;padding-bottom:0.5rem;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <a class="hero-back" href="index.html">← Tillbaka</a>
+  <div class="hero-bg-char">🌿</div>
+  <span class="hero-emoji">🌿</span>
+  <h1>DOLMA<span>KALKYLATOR</span></h1>
+  <p class="hero-sub">Mehsi · Mellanöstern & Medelhavet · Skalbart</p>
+</div>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="showPage('recept',this)">
+    <span class="tab-icon">📋</span>RECEPT
+  </button>
+  <button class="tab-btn" onclick="showPage('praktiskt',this)">
+    <span class="tab-icon">✅</span>PRAKTISKT
+  </button>
+</nav>
+
+<!-- ═══ PAGE: RECEPT ═══ -->
+<div class="page active" id="page-recept">
+<div class="container">
+
+  <div class="section-label">Visste du?</div>
+  <div class="fact-card" id="factCard" onclick="nextFact()">
+    <div class="fact-eyebrow">Dolma-fakta</div>
+    <div class="fact-text" id="factText"></div>
+    <div class="fact-tap">Tryck för ny fakta →</div>
+  </div>
+
+  <div class="section-label">Antal kastruller</div>
+  <div class="slider-card">
+    <div class="kg-row">
+      <span class="kg-big" id="kastDisplay">2</span>
+      <span class="kg-unit">kastruller</span>
+      <span class="yield-pill" id="yieldPill">≈ 12–16 portioner</span>
+    </div>
+    <input type="range" id="kastSlider" min="1" max="6" step="0.5" value="2">
+    <div class="slider-ticks"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div>
+    <div class="manual-row">
+      <span>Exakt:</span>
+      <input type="number" id="manualInput" min="1" max="20" step="0.5" placeholder="2">
+      <span>kastruller</span>
+    </div>
+    <div class="sync-banner" id="syncBanner">
+      <span class="sync-dot"></span>
+      <span id="syncBannerText">Laddat sparat recept</span>
+    </div>
+    <div class="saved-recipes-row" id="savedRecipesRow"></div>
+    <button class="save-recipe-btn" onclick="openSaveModal()">💾 Spara nuvarande recept</button>
+  </div>
+
+  <div class="section-label">Kött & Fyllning</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Lammbringa</span><span class="ing-val" id="i-lamm">2 kg</span></div>
+    <div class="ing-row"><span class="ing-name">Nötfärs</span><span class="ing-val" id="i-fars">1 kg</span></div>
+    <div class="ing-row"><span class="ing-name">Ris (råris)</span><span class="ing-val" id="i-ris">500 g</span></div>
+  </div>
+
+  <div class="section-label">Sås & Smak</div>
+  <div class="card">
+    <div class="ing-row">
+      <span class="ing-name">Tomatpuré<span class="opt-line">Köp 830g burk — räcker för 1–2 kastruller</span></span>
+      <span class="ing-val" id="i-tomat">500 g</span>
+    </div>
+    <div class="ing-row"><span class="ing-name">Vitlök, pressad</span><span class="ing-val" id="i-vitlok">2 huvuden</span></div>
+    <div class="ing-row"><span class="ing-name">Citroner, pressade</span><span class="ing-val" id="i-citron">5 st</span></div>
+  </div>
+
+  <div class="section-label">Kryddor</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Salt</span><span class="ing-val" id="i-salt">2 msk</span></div>
+    <div class="ing-row"><span class="ing-name">Svartpeppar</span><span class="ing-val" id="i-peppar">1 msk</span></div>
+    <div class="ing-row"><span class="ing-name">Flefle (paprika)</span><span class="ing-val" id="i-flefle">2 msk</span></div>
+    <div class="ing-row"><span class="ing-name">Sju kryddor (baharat)</span><span class="ing-val" id="i-sjukryddor">1 msk</span></div>
+    <div class="ing-row"><span class="ing-name">Mynta, torkad</span><span class="ing-val" id="i-mynta">2 näve</span></div>
+  </div>
+
+  <div class="section-label">Grönsaker att fylla</div>
+  <div class="card">
+    <div class="ing-row"><span class="ing-name">Aubergine</span><span class="ing-val" id="i-aubergine">3 st</span></div>
+    <div class="ing-row"><span class="ing-name">Röd paprika</span><span class="ing-val" id="i-paprika">2 st</span></div>
+    <div class="ing-row"><span class="ing-name">Zucchini, små</span><span class="ing-val" id="i-zucchini">10 st</span></div>
+  </div>
+
+  <div class="section-label">Steg för steg</div>
+  <div class="steps-card">
+
+    <div class="step-row" id="step-1">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Stek lammet <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~30 min</span></div>
+        <div class="step-desc">Stek lammbringan utan vatten. Släpper köttet inte egen vätska, häll i lite vatten så det inte bränns fast. Stek i ca 30 minuter. Salta först när köttet är klart stekt.</div>
+        <div class="timer-btn" id="tbtn-1" onclick="startTimer(1,30,'Lammet steks')">⏱ 30 min</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(1)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-2">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Koka <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">30–40 min</span></div>
+        <div class="step-desc">Koka på hög värme med lock på. Om bladen är sega, koka i 40 minuter — är de mjuka räcker 30 minuter.</div>
+        <div class="timer-btn" id="tbtn-2a" onclick="startTimer('2a',30,'Koka — mjuka blad')">⏱ 30 min – mjuka blad</div>
+        <div class="timer-btn" id="tbtn-2b" onclick="startTimer('2b',40,'Koka — sega blad')" style="margin-left:0.4rem;">⏱ 40 min – sega blad</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(2)">✓</button>
+    </div>
+
+    <div class="step-row" id="step-3">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Sänk till låg värme <span style="font-size:0.7rem;font-weight:400;color:var(--muted)">~20 min</span></div>
+        <div class="step-desc">Sänk värmen och låt sjuda med lock på i 20 minuter till. Ha lock på hela tiden under hela kokningen.</div>
+        <div class="timer-btn" id="tbtn-3" onclick="startTimer(3,20,'Sjuder på låg värme')">⏱ 20 min</div>
+      </div>
+      <button class="step-check" onclick="toggleStep(3)">✓</button>
+    </div>
+
+  </div>
+
+  <button class="export-btn" onclick="exportRecipe()">📋 KOPIERA RECEPT SOM TEXT</button>
+
+  <div class="note">
+    <strong>Tips</strong>
+    Fyll bara till ¾ — riset sväller! Sparat urholkat köttet från aubergine/zucchini kan kokas ner i såsen för mer smak. Dolma smakar bättre dagen efter.
+  </div>
+  <footer>Recept: Familjens mehsi-tradition</footer>
+</div>
+</div>
+
+<!-- ═══ PAGE: PRAKTISKT ═══ -->
+<div class="page" id="page-praktiskt">
+<div class="container">
+
+  <div class="section-label">Inköpslista</div>
+  <div class="prak-card">
+    <button class="inkop-prefill-btn" onclick="prefillInkop()">📋 Fyll i från receptet automatiskt</button>
+    <div class="inkop-add-row">
+      <input class="inkop-input" type="text" id="inkopInput" placeholder="Lägg till vara..." onkeydown="if(event.key==='Enter')addInkopItem()">
+      <button class="inkop-add-btn" onclick="addInkopItem()">+</button>
+    </div>
+    <div id="inkop-list"></div>
+    <button class="inkop-clear" onclick="clearChecked()">Rensa bockat</button>
+  </div>
+
+  <footer>Inköpslistan sparas lokalt i din webbläsare.</footer>
+</div>
+</div>
+
+<!-- TIMER OVERLAY -->
+<div class="timer-overlay" id="timerOverlay">
+  <div class="t-label" id="t-label">Timer</div>
+  <div class="t-time" id="t-time">00:00</div>
+  <button class="t-stop" onclick="stopTimer()">Avbryt</button>
+</div>
+
+<!-- SAVE MODAL -->
+<div class="save-modal-bg" id="saveModal" onclick="if(event.target===this)closeSaveModal()">
+  <div class="save-modal">
+    <h3>Spara recept</h3>
+    <div class="save-modal-info">Sparar <span id="saveModalKast"></span> kastruller</div>
+    <div class="modal-field" style="margin-bottom:0.8rem;">
+      <label>Namn</label>
+      <input class="modal-input" type="text" id="saveRecipeName" placeholder="t.ex. Stor sats dolma" onkeydown="if(event.key==='Enter')doSaveRecipe()">
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeSaveModal()">Avbryt</button>
+      <button class="modal-save" onclick="doSaveRecipe()">Spara</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var BASE = 2; // 2 kastruller = bas
+
+// Ingredienser: base-värden för 2 kastruller
+var ings = [
+  { id:'i-lamm',      base:2000, unit:'g',       type:'wt' },
+  { id:'i-fars',      base:1000, unit:'g',       type:'wt' },
+  { id:'i-ris',       base:500,  unit:'g',       type:'wt' },
+  { id:'i-tomat',     base:500,  unit:'g',       type:'wt' },
+  { id:'i-vitlok',    base:2,    unit:'huvuden', type:'cnt' },
+  { id:'i-citron',    base:5,    unit:'st',      type:'cnt' },
+  { id:'i-salt',      base:2,    unit:'msk',     type:'spoon' },
+  { id:'i-peppar',    base:1,    unit:'msk',     type:'spoon' },
+  { id:'i-flefle',    base:2,    unit:'msk',     type:'spoon' },
+  { id:'i-sjukryddor',base:1,    unit:'msk',     type:'spoon' },
+  { id:'i-mynta',     base:2,    unit:'näve',    type:'cnt' },
+  { id:'i-aubergine', base:3,    unit:'st',      type:'cnt' },
+  { id:'i-paprika',   base:2,    unit:'st',      type:'cnt' },
+  { id:'i-zucchini',  base:10,   unit:'st',      type:'cnt' }
+];
+
+function fmt(val, unit, type) {
+  if (type === 'wt') {
+    if (val >= 1000) return (val/1000).toFixed(1).replace('.',',') + ' kg';
+    return Math.round(val) + ' g';
+  }
+  if (type === 'cnt') {
+    var h = Math.max(0.5, Math.round(val*2)/2);
+    if (unit === 'näve') return Math.max(1, Math.round(val)) + ' näve';
+    if (unit === 'huvuden') return Math.max(1, Math.round(val)) + ' huvuden';
+    return h === Math.floor(h) ? h + ' ' + unit : Math.floor(h) + '½ ' + unit;
+  }
+  if (type === 'spoon') {
+    if (val < 0.25) return '¼ msk';
+    if (val < 0.6)  return '½ msk';
+    if (val < 1.1)  return '1 msk';
+    return val.toFixed(1).replace('.',',') + ' msk';
+  }
+}
+
+function portionEstimate(kast) {
+  var lo = Math.round(kast * 6), hi = Math.round(kast * 8);
+  return '≈ ' + lo + '–' + hi + ' portioner';
+}
+
+var currentKast = 2;
+function formatKast(k) {
+  return (k % 1 === 0) ? String(k) : k.toFixed(1).replace('.', ',');
+}
+
+function update(kast) {
+  currentKast = kast;
+  var r = kast / BASE;
+  document.getElementById('kastDisplay').textContent = formatKast(kast);
+  document.getElementById('yieldPill').textContent = portionEstimate(kast);
+  for (var i = 0; i < ings.length; i++) {
+    var el = document.getElementById(ings[i].id);
+    if (el) el.textContent = fmt(ings[i].base * r, ings[i].unit, ings[i].type);
+  }
+  document.getElementById('manualInput').value = kast;
+  updateInkopAmounts();
+}
+
+var slider = document.getElementById('kastSlider');
+slider.addEventListener('input', function() { update(parseFloat(slider.value)); });
+document.getElementById('manualInput').addEventListener('input', function() {
+  var v = parseFloat(this.value);
+  if (!isNaN(v) && v >= 1 && v <= 20) { if (v <= 6) slider.value = v; update(v); }
+});
+document.getElementById('manualInput').addEventListener('change', function() {
+  var v = parseFloat(this.value);
+  if (!isNaN(v) && v >= 1) { if (v <= 6) slider.value = Math.min(v,6); update(v); }
+});
+
+// ── TABS ──────────────────────────────────────────────────────
+function showPage(name, btn) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].className = 'page';
+  document.getElementById('page-' + name).className = 'page active';
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var j = 0; j < btns.length; j++) btns[j].className = 'tab-btn';
+  btn.className = 'tab-btn active';
+  window.scrollTo(0, 0);
+}
+
+// ── STEPS ─────────────────────────────────────────────────────
+var doneSteps = {};
+function toggleStep(n) {
+  doneSteps[n] = !doneSteps[n];
+  var row = document.getElementById('step-' + n);
+  if (row) row.className = 'step-row' + (doneSteps[n] ? ' done' : '');
+}
+
+// ── TIMER (bakgrundssäker) ─────────────────────────────────────
+var timerIv = null, activeStep = null;
+function startTimer(step, mins, label) {
+  stopTimer();
+  var endTime = Date.now() + mins * 60 * 1000;
+  localStorage.setItem('dolma_timer', JSON.stringify({ endTime: endTime, label: label, step: step }));
+  activeStep = step;
+  var b = document.getElementById('tbtn-' + step);
+  if (b) b.className = 'timer-btn running';
+  document.getElementById('t-label').textContent = label;
+  document.getElementById('timerOverlay').className = 'timer-overlay visible';
+  timerIv = setInterval(tickTimer, 500);
+  tickTimer();
+}
+function tickTimer() {
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem('dolma_timer')); } catch(e) {}
+  if (!saved) { stopTimer(); return; }
+  var remaining = Math.max(0, Math.floor((saved.endTime - Date.now()) / 1000));
+  if (remaining <= 0) {
+    localStorage.removeItem('dolma_timer');
+    clearInterval(timerIv); timerIv = null;
+    var td = document.getElementById('t-time');
+    td.textContent = 'KLAR! ✓'; td.className = 't-time';
+    var b = document.getElementById('tbtn-' + saved.step);
+    if (b) { b.className = 'timer-btn done'; b.textContent = '✓ Klar'; }
+    if (navigator.vibrate) navigator.vibrate([300,100,300]);
+    return;
+  }
+  var h = Math.floor(remaining/3600), m = Math.floor((remaining%3600)/60), s = remaining%60;
+  var str = h > 0 ? h+':'+pad(m)+':'+pad(s) : pad(m)+':'+pad(s);
+  var td = document.getElementById('t-time');
+  td.textContent = str;
+  td.className = 't-time' + (remaining < 60 ? ' urgent' : '');
+  document.getElementById('t-label').textContent = saved.label;
+}
+function stopTimer() {
+  if (timerIv) { clearInterval(timerIv); timerIv = null; }
+  localStorage.removeItem('dolma_timer');
+  document.getElementById('timerOverlay').className = 'timer-overlay';
+  if (activeStep !== null) {
+    var b = document.getElementById('tbtn-' + activeStep);
+    if (b && b.className.indexOf('done') === -1) b.className = 'timer-btn';
+    activeStep = null;
+  }
+}
+function resumeTimerIfActive() {
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem('dolma_timer')); } catch(e) {}
+  if (!saved) return;
+  if (Math.floor((saved.endTime - Date.now()) / 1000) <= 0) { localStorage.removeItem('dolma_timer'); return; }
+  activeStep = saved.step;
+  var b = document.getElementById('tbtn-' + saved.step);
+  if (b) b.className = 'timer-btn running';
+  document.getElementById('t-label').textContent = saved.label;
+  document.getElementById('timerOverlay').className = 'timer-overlay visible';
+  timerIv = setInterval(tickTimer, 500);
+  tickTimer();
+}
+function pad(n) { return n < 10 ? '0'+n : ''+n; }
+
+// ── INKÖPSLISTA ────────────────────────────────────────────────
+var inkopItems = [], inkopCtr = 0;
+
+var RECIPE_ITEMS = [
+  { key:'lamm',       name:'Lammbringa',                   cat:'Kött & Fyllning', getAmt: function(r){ return fmt(2000*r,'g','wt'); } },
+  { key:'fars',       name:'Nötfärs',                    cat:'Kött & Fyllning', getAmt: function(r){ return fmt(1000*r,'g','wt'); } },
+  { key:'ris',        name:'Ris (råris)',                 cat:'Kött & Fyllning', getAmt: function(r){ return fmt(500*r,'g','wt'); } },
+  { key:'tomat',      name:'Tomatpuré',                   cat:'Sås & Smak', getAmt: function(r){ return fmt(500*r,'g','wt')+' (830g burk)'; } },
+  { key:'vitlok',     name:'Vitlök',                      cat:'Sås & Smak', getAmt: function(r){ return Math.max(1,Math.round(2*r))+' huvuden'; } },
+  { key:'citron',     name:'Citroner',                    cat:'Sås & Smak', getAmt: function(r){ return Math.max(1,Math.round(5*r))+' st'; } },
+  { key:'salt',       name:'Salt',                        cat:'Kryddor', getAmt: function(r){ return fmt(2*r,'msk','spoon'); } },
+  { key:'peppar',     name:'Svartpeppar',                 cat:'Kryddor', getAmt: function(r){ return fmt(1*r,'msk','spoon'); } },
+  { key:'flefle',     name:'Flefle (paprika)',             cat:'Kryddor', getAmt: function(r){ return fmt(2*r,'msk','spoon'); } },
+  { key:'sjukryddor', name:'Sju kryddor (baharat)',       cat:'Kryddor', getAmt: function(r){ return fmt(1*r,'msk','spoon'); } },
+  { key:'mynta',      name:'Mynta, torkad',               cat:'Kryddor', getAmt: function(r){ return Math.max(1,Math.round(2*r))+' näve'; } },
+  { key:'aubergine',  name:'Aubergine',                   cat:'Grönsaker', getAmt: function(r){ return Math.max(1,Math.round(3*r))+' st'; } },
+  { key:'paprika',    name:'Röd paprika',                 cat:'Grönsaker', getAmt: function(r){ return Math.max(1,Math.round(2*r))+' st'; } },
+  { key:'zucchini',   name:'Zucchini, små',               cat:'Grönsaker', getAmt: function(r){ return Math.max(1,Math.round(10*r))+' st'; } }
+];
+var INKOP_CAT_ORDER = ['Kött & Fyllning','Sås & Smak','Kryddor','Grönsaker','Övrigt'];
+function getItemCategory(it) {
+  if (it.recipeKey) {
+    for (var i = 0; i < RECIPE_ITEMS.length; i++) if (RECIPE_ITEMS[i].key === it.recipeKey) return RECIPE_ITEMS[i].cat;
+  }
+  return 'Övrigt';
+}
+
+function getRecipeRatio() {
+  return currentKast / BASE;
+}
+function loadInkop() {
+  try { var s = localStorage.getItem('dolma_inkop'); if(s){ inkopItems=JSON.parse(s); inkopCtr=inkopItems.length?Math.max.apply(null,inkopItems.map(function(x){return x.id;}))+1:0; } } catch(e) {}
+}
+function saveInkop() { try { localStorage.setItem('dolma_inkop', JSON.stringify(inkopItems)); } catch(e) {} }
+function prefillInkop() {
+  var r = getRecipeRatio();
+  for (var i = 0; i < RECIPE_ITEMS.length; i++) {
+    var ri = RECIPE_ITEMS[i], exists = false;
+    for (var j = 0; j < inkopItems.length; j++) if (inkopItems[j].recipeKey === ri.key) { exists=true; break; }
+    if (!exists) { inkopCtr++; inkopItems.push({ id:inkopCtr, name:ri.name, amount:ri.getAmt(r), recipeKey:ri.key, checked:false }); }
+  }
+  saveInkop(); renderInkop();
+}
+function updateInkopAmounts() {
+  var r = getRecipeRatio(), changed = false;
+  for (var i = 0; i < inkopItems.length; i++) {
+    if (inkopItems[i].recipeKey) {
+      for (var j = 0; j < RECIPE_ITEMS.length; j++) {
+        if (RECIPE_ITEMS[j].key === inkopItems[i].recipeKey) {
+          var na = RECIPE_ITEMS[j].getAmt(r);
+          if (inkopItems[i].amount !== na) { inkopItems[i].amount = na; changed = true; }
+          break;
+        }
+      }
+    }
+  }
+  if (changed) { saveInkop(); renderInkop(); }
+}
+function addInkopItem() {
+  var inp = document.getElementById('inkopInput'), txt = inp.value.trim();
+  if (!txt) return;
+  inkopCtr++; inkopItems.push({ id:inkopCtr, name:txt, amount:'', recipeKey:null, checked:false });
+  inp.value = ''; saveInkop(); renderInkop();
+}
+function toggleInkop(id) {
+  for (var i=0; i<inkopItems.length; i++) if (inkopItems[i].id===id) { inkopItems[i].checked=!inkopItems[i].checked; break; }
+  saveInkop(); renderInkop();
+}
+function deleteInkop(id) { inkopItems=inkopItems.filter(function(x){return x.id!==id;}); saveInkop(); renderInkop(); }
+function clearChecked() { inkopItems=inkopItems.filter(function(x){return !x.checked;}); saveInkop(); renderInkop(); }
+function renderInkop() {
+  var list = document.getElementById('inkop-list');
+  if (!inkopItems.length) { list.innerHTML='<div style="font-size:0.8rem;color:var(--muted2);text-align:center;padding:0.8rem 0;font-style:italic;">Listan är tom.</div>'; return; }
+  var groups = {};
+  for (var i = 0; i < inkopItems.length; i++) {
+    var cat = getItemCategory(inkopItems[i]);
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(inkopItems[i]);
+  }
+  var cats = INKOP_CAT_ORDER.filter(function(c){ return groups[c]; });
+  for (var c in groups) if (cats.indexOf(c) === -1) cats.push(c);
+
+  var h = '';
+  for (var g = 0; g < cats.length; g++) {
+    var items = groups[cats[g]];
+    h += '<div class="inkop-cat-label">' + cats[g] + '</div>';
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      h += '<div class="inkop-item">';
+      h += '<button class="inkop-check'+(it.checked?' checked':'')+'" onclick="toggleInkop('+it.id+')">'+(it.checked?'✓':'')+'</button>';
+      h += '<div style="flex:1;min-width:0;"><span class="inkop-text'+(it.checked?' checked':'')+'">'+it.name+'</span>';
+      if (it.amount) {
+        var amtStyle = it.recipeKey ? 'color:var(--green);font-weight:600;font-family:\'Bebas Neue\',sans-serif;font-size:1rem;' : 'color:var(--muted);';
+        var liveTag = it.recipeKey ? ' <span style="font-size:0.6rem;background:var(--green-pale);color:var(--green);border-radius:4px;padding:0.05rem 0.3rem;font-family:\'DM Sans\',sans-serif;font-weight:600;letter-spacing:0.06em;">LIVE</span>' : '';
+        h += '<span style="display:block;'+amtStyle+'">'+it.amount+liveTag+'</span>';
+      }
+      h += '</div>';
+      h += '<button class="inkop-del" onclick="deleteInkop('+it.id+')">✕</button>';
+      h += '</div>';
+    }
+  }
+  list.innerHTML = h;
+}
+
+// ── SPARADE RECEPT ────────────────────────────────────────────
+var savedRecipes = [];
+function loadSavedRecipes() { try { var s=localStorage.getItem('dolma_saved'); if(s) savedRecipes=JSON.parse(s); } catch(e) {} }
+function persistSavedRecipes() { try { localStorage.setItem('dolma_saved', JSON.stringify(savedRecipes)); } catch(e) {} }
+function openSaveModal() {
+  document.getElementById('saveModalKast').textContent = formatKast(currentKast);
+  document.getElementById('saveRecipeName').value = formatKast(currentKast) + ' kastruller dolma';
+  document.getElementById('saveModal').className = 'save-modal-bg visible';
+  setTimeout(function(){ document.getElementById('saveRecipeName').select(); }, 100);
+}
+function closeSaveModal() { document.getElementById('saveModal').className = 'save-modal-bg'; }
+function doSaveRecipe() {
+  var name = document.getElementById('saveRecipeName').value.trim();
+  if (!name) return;
+  var kast = currentKast;
+  savedRecipes.push({ id:Date.now(), name:name, kast:kast });
+  persistSavedRecipes(); closeSaveModal(); renderSavedRecipes();
+  var btn = document.querySelector('.save-recipe-btn');
+  btn.textContent = '✓ Sparat!';
+  setTimeout(function(){ btn.textContent = '💾 Spara nuvarande recept'; }, 1800);
+}
+function loadSavedRecipe(id) {
+  for (var i=0; i<savedRecipes.length; i++) {
+    if (savedRecipes[i].id === id) {
+      var kast = savedRecipes[i].kast;
+      if (kast <= 6) document.getElementById('kastSlider').value = kast;
+      update(kast);
+      var bn = document.getElementById('syncBanner');
+      document.getElementById('syncBannerText').textContent = 'Laddat: ' + savedRecipes[i].name;
+      bn.className = 'sync-banner visible';
+      setTimeout(function(){ bn.className = 'sync-banner'; }, 2500);
+      break;
+    }
+  }
+}
+function deleteSavedRecipe(id) { savedRecipes=savedRecipes.filter(function(r){return r.id!==id;}); persistSavedRecipes(); renderSavedRecipes(); }
+function renderSavedRecipes() {
+  var row = document.getElementById('savedRecipesRow');
+  if (!savedRecipes.length) { row.innerHTML=''; return; }
+  var h = '';
+  for (var i=0; i<savedRecipes.length; i++) {
+    var r = savedRecipes[i];
+    h += '<div class="saved-recipe-chip" onclick="loadSavedRecipe('+r.id+')">';
+    h += r.name;
+    h += '<button class="chip-del" onclick="event.stopPropagation();deleteSavedRecipe('+r.id+')">✕</button>';
+    h += '</div>';
+  }
+  row.innerHTML = h;
+}
+
+// ── FAKTA ─────────────────────────────────────────────────────
+var FACTS = [
+  'Dolma betyder "fylld" på turkiska — rätten finns i över 50 varianter från Marocko till Iran.',
+  'I arabvärlden kallas rätten mehsi (محشي) vilket också betyder "fylld".',
+  'Vindruvsblads-dolma är en av de äldsta kända rätterna — spår finns från det osmanska imperiet på 1500-talet.',
+  'I Azerbajdzjan är dolma ett kulturarv listat av UNESCO sedan 2017.',
+  'Riset i fyllningen blötläggs för att absorbera smakerna från köttet och kryddorna under tillagning.',
+  'Sju kryddor (baharat) är en blandning av svartpeppar, kryddpeppar, kanel, koriander, kardemumma, muskot och nejlika.',
+  'I Libanon görs dolma ofta vegetarisk med ris, tomat, persilja och citron — utan kött.',
+  'Zucchini är den vanligaste grönsaken att fylla i Egypten och Syrien.',
+  'Citronen i såsen är inte bara smak — syran hjälper till att hålla grönsakerna hela under kokning.',
+  'Rester av dolma smakar ännu bättre nästa dag när smakerna har satt sig ordentligt.',
+  'I Grekland kallas samma rätt gemistá och görs ofta med tomater och paprika.',
+  'Mynta är ett signaturtillskott i arabisk dolma — den ger en fräsch kontrast till det feta köttet.'
+];
+var factIndex = 0;
+function initFact() { factIndex = Math.floor(Math.random()*FACTS.length); document.getElementById('factText').textContent = FACTS[factIndex]; }
+function nextFact() {
+  var card = document.getElementById('factCard');
+  card.style.opacity='0'; card.style.transform='scale(0.97)'; card.style.transition='opacity 0.15s,transform 0.15s';
+  setTimeout(function(){
+    factIndex = (factIndex+1) % FACTS.length;
+    document.getElementById('factText').textContent = FACTS[factIndex];
+    card.style.opacity='1'; card.style.transform='scale(1)';
+  }, 150);
+}
+
+// ── EXPORT ────────────────────────────────────────────────────
+function exportRecipe() {
+  var kast = currentKast;
+  var r = kast / BASE, L = [];
+  L.push('DOLMA / MEHSI — ' + formatKast(kast) + ' kastruller');
+  L.push('Ca ' + Math.round(kast*6) + '–' + Math.round(kast*8) + ' portioner\n');
+  L.push('KÖTT & FYLLNING');
+  L.push('  Lammbringa: ' + fmt(2000*r,'g','wt'));
+  L.push('  Nötfärs: ' + fmt(1000*r,'g','wt'));
+  L.push('  Ris: ' + fmt(500*r,'g','wt'));
+  L.push('\nSÅS & SMAK');
+  L.push('  Tomatpuré: ' + fmt(500*r,'g','wt'));
+  L.push('  Vitlök: ' + Math.max(1,Math.round(2*r)) + ' huvuden');
+  L.push('  Citroner: ' + Math.max(1,Math.round(5*r)) + ' st');
+  L.push('\nKRYDDOR');
+  L.push('  Salt: ' + fmt(2*r,'msk','spoon'));
+  L.push('  Svartpeppar: ' + fmt(1*r,'msk','spoon'));
+  L.push('  Flefle (paprika): ' + fmt(2*r,'msk','spoon'));
+  L.push('  Sju kryddor: ' + fmt(1*r,'msk','spoon'));
+  L.push('  Mynta: ' + Math.max(1,Math.round(2*r)) + ' näve');
+  L.push('\nGRÖNSAKER');
+  L.push('  Aubergine: ' + Math.max(1,Math.round(3*r)) + ' st');
+  L.push('  Röd paprika: ' + Math.max(1,Math.round(2*r)) + ' st');
+  L.push('  Zucchini: ' + Math.max(1,Math.round(10*r)) + ' st');
+  var txt = L.join('\n'), btn = document.querySelector('.export-btn');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(function(){ btn.textContent='✓ KOPIERAT!'; setTimeout(function(){ btn.textContent='📋 KOPIERA RECEPT SOM TEXT'; },2000); });
+  } else {
+    var ta=document.createElement('textarea'); ta.value=txt; ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent='✓ KOPIERAT!'; setTimeout(function(){ btn.textContent='📋 KOPIERA RECEPT SOM TEXT'; },2000);
+  }
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+loadInkop();
+loadSavedRecipes();
+update(2);
+renderInkop();
+renderSavedRecipes();
+initFact();
+resumeTimerIfActive();
+</script>
+</body>
+</html>
