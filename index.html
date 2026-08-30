@@ -3,134 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>Legendariska Recept</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@400;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-
 <style>
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%}
-body{font-family:'DM Sans',sans-serif;background:#1a1008;color:#f5ead8;display:flex;flex-direction:column;min-height:100vh}
-
-/* PIN-SKYDD */
-#pinScreen{position:fixed;inset:0;z-index:9999;background:#1a1008;display:flex;align-items:center;justify-content:center;padding:20px}
-.pin-box{width:min(360px,100%);text-align:center}
-.pin-lock{font-size:3rem;margin-bottom:12px}
-.pin-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.05em;margin-bottom:8px}
-.pin-text{font-size:.85rem;color:rgba(245,234,216,.45);margin-bottom:22px}
-#pinInput{width:100%;padding:15px;border:1px solid rgba(245,234,216,.18);border-radius:14px;background:#24170e;color:#fff;text-align:center;font-size:1.7rem;letter-spacing:.45em;outline:none}
-#pinInput:focus{border-color:#c8631c}
-#pinButton{width:100%;margin-top:12px;padding:14px;border:0;border-radius:14px;background:#c8631c;color:#fff;font-weight:600;cursor:pointer;font-size:.95rem}
-#pinError{height:20px;margin-top:10px;color:#e57373;font-size:.78rem}
-#siteContent{display:none;flex-direction:column;min-height:100vh}
-
-header{padding:2rem 1.5rem 1rem;text-align:center;flex-shrink:0;position:relative;z-index:2}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.3em;color:rgba(245,234,216,.35);text-transform:uppercase;margin-bottom:.5rem}
-.tagline{font-size:.82rem;color:rgba(245,234,216,.45);font-weight:300;font-style:italic}
-.cards{flex:1;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto;padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom));scrollbar-width:none}
-.cards::-webkit-scrollbar{display:none}
-.recipe-card{min-height:230px;border-radius:20px;position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease;flex-shrink:0}
-.recipe-card:active{transform:scale(.97)}
-.card-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .4s ease}
-.recipe-card:hover .card-bg{transform:scale(1.03)}
-.card-overlay{position:absolute;inset:0}
-.kimchi .card-bg{background:linear-gradient(145deg,#6b1a10 0%,#3d0e08 40%,#1a0804 100%)}
-.kimchi .card-overlay{background:linear-gradient(to top,rgba(15,4,2,.88) 0%,rgba(15,4,2,.2) 60%,transparent 100%)}
-.kimchi-pattern,.dolma-pattern,.kott-pattern,.guacamole-pattern{position:absolute;inset:0}
-.kimchi-pattern{background-image:radial-gradient(circle at 20% 30%,rgba(200,39,28,.3) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(180,30,18,.2) 0%,transparent 45%)}
-.dolma .card-bg{background:linear-gradient(145deg,#2a3d1a 0%,#1a2810 40%,#0d1808 100%)}
-.dolma .card-overlay{background:linear-gradient(to top,rgba(5,12,3,.88) 0%,rgba(5,12,3,.2) 60%,transparent 100%)}
-.dolma-pattern{background-image:radial-gradient(circle at 25% 35%,rgba(80,120,40,.25) 0%,transparent 50%),radial-gradient(circle at 75% 65%,rgba(60,100,30,.18) 0%,transparent 45%)}
-.kott .card-bg{background:linear-gradient(145deg,#6b2a0a 0%,#3d1505 40%,#1a0800 100%)}
-.kott .card-overlay{background:linear-gradient(to top,rgba(15,5,2,.88) 0%,rgba(15,5,2,.2) 60%,transparent 100%)}
-.kott-pattern{background-image:radial-gradient(circle at 30% 40%,rgba(180,80,20,.25) 0%,transparent 50%),radial-gradient(circle at 75% 65%,rgba(140,50,10,.18) 0%,transparent 45%)}
-.guacamole .card-bg{background:linear-gradient(145deg,#4f751c 0%,#29440e 40%,#0d1c05 100%)}
-.guacamole .card-overlay{background:linear-gradient(to top,rgba(3,10,1,.9) 0%,rgba(3,10,1,.2) 60%,transparent 100%)}
-.guacamole-pattern{background-image:radial-gradient(circle at 20% 30%,rgba(150,200,55,.3) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(80,140,25,.2) 0%,transparent 45%)}
-.kimchi-char,.dolma-char,.kott-char,.guacamole-char{position:absolute;top:50%;right:.1em;transform:translateY(-50%);line-height:1;pointer-events:none;user-select:none}
-.kimchi-char{font-family:'Noto Serif KR',serif;font-size:11rem;color:rgba(200,39,28,.12)}
-.dolma-char{font-size:9rem;color:rgba(80,120,40,.12)}
-.kott-char{font-size:8rem;color:rgba(180,80,20,.1)}
-.guacamole-char{font-size:9rem;color:rgba(120,180,45,.13)}
-.card-content{position:relative;z-index:2}.card-origin{font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem}.origin-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}.card-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,14vw,5.5rem);letter-spacing:.04em;line-height:.9;color:#fff}.card-desc{font-size:.78rem;color:rgba(245,234,216,.55);margin-top:.5rem;font-weight:300;line-height:1.4;max-width:300px}.card-arrow{position:absolute;right:1.5rem;bottom:1.5rem;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;z-index:2}
-.kimchi .card-origin{color:rgba(220,120,100,.9)}.kimchi .origin-dot{background:#c8271c}.kimchi .card-name span{color:#c8271c}.kimchi .card-arrow{background:rgba(200,39,28,.25);border:1px solid rgba(200,39,28,.4)}
-.dolma .card-origin{color:rgba(130,180,80,.9)}.dolma .origin-dot{background:#6ab04c}.dolma .card-name span{color:#6ab04c}.dolma .card-arrow{background:rgba(106,176,76,.2);border:1px solid rgba(106,176,76,.35)}
-.kott .card-origin{color:rgba(220,150,80,.9)}.kott .origin-dot{background:#c8631c}.kott .card-name span{color:#c8631c}.kott .card-arrow{background:rgba(200,99,28,.2);border:1px solid rgba(200,99,28,.35)}
-.guacamole .card-origin{color:rgba(165,210,90,.9)}.guacamole .origin-dot{background:#7cb342}.guacamole .card-name span{color:#7cb342}.guacamole .card-arrow{background:rgba(124,179,66,.2);border:1px solid rgba(124,179,66,.35)}
-footer{text-align:center;font-size:.65rem;color:rgba(245,234,216,.2);letter-spacing:.08em;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));flex-shrink:0}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-header{animation:fadeUp .4s ease both}.kimchi{animation:fadeUp .4s ease .1s both}.dolma{animation:fadeUp .4s ease .2s both}.kott{animation:fadeUp .4s ease .3s both}.guacamole{animation:fadeUp .4s ease .4s both}
-@media (min-width:700px){.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;max-width:1000px;width:100%;margin:0 auto}.recipe-card{min-height:300px}.card-name{font-size:5rem}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html,body{min-height:100%}body{font-family:'DM Sans',sans-serif;background:#1a1008;color:#f5ead8;display:flex;flex-direction:column;min-height:100vh}#pinScreen{position:fixed;inset:0;z-index:9999;background:#1a1008;display:flex;align-items:center;justify-content:center;padding:20px}.pin-box{width:min(360px,100%);text-align:center}.pin-lock{font-size:3rem;margin-bottom:12px}.pin-title{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.05em;margin-bottom:8px}.pin-text{font-size:.85rem;color:rgba(245,234,216,.45);margin-bottom:22px}#pinInput{width:100%;padding:15px;border:1px solid rgba(245,234,216,.18);border-radius:14px;background:#24170e;color:#fff;text-align:center;font-size:1.7rem;letter-spacing:.45em;outline:none}#pinButton{width:100%;margin-top:12px;padding:14px;border:0;border-radius:14px;background:#c8631c;color:#fff;font-weight:600;cursor:pointer;font-size:.95rem}#pinError{height:20px;margin-top:10px;color:#e57373;font-size:.78rem}#siteContent{display:none;flex-direction:column;min-height:100vh}header{padding:2rem 1.5rem 1rem;text-align:center;flex-shrink:0;position:relative;z-index:2}.logo{font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.3em;color:rgba(245,234,216,.35);text-transform:uppercase;margin-bottom:.5rem}.tagline{font-size:.82rem;color:rgba(245,234,216,.45);font-weight:300;font-style:italic}.cards{flex:1;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto;padding:.75rem 1rem calc(.75rem + env(safe-area-inset-bottom));scrollbar-width:none}.cards::-webkit-scrollbar{display:none}.recipe-card{min-height:230px;border-radius:20px;position:relative;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;text-decoration:none;transition:transform .18s ease;flex-shrink:0}.recipe-card:active{transform:scale(.97)}.card-bg{position:absolute;inset:0;background-size:cover;background-position:center}.card-overlay{position:absolute;inset:0}.pattern{position:absolute;inset:0}.kimchi .card-bg{background:linear-gradient(145deg,#6b1a10,#3d0e08 40%,#1a0804)}.kimchi .card-overlay{background:linear-gradient(to top,rgba(15,4,2,.88),rgba(15,4,2,.2) 60%,transparent)}.kimchi .pattern{background:radial-gradient(circle at 20% 30%,rgba(200,39,28,.3),transparent 50%),radial-gradient(circle at 80% 70%,rgba(180,30,18,.2),transparent 45%)}.dolma .card-bg{background:linear-gradient(145deg,#2a3d1a,#1a2810 40%,#0d1808)}.dolma .card-overlay{background:linear-gradient(to top,rgba(5,12,3,.88),rgba(5,12,3,.2) 60%,transparent)}.dolma .pattern{background:radial-gradient(circle at 25% 35%,rgba(80,120,40,.25),transparent 50%),radial-gradient(circle at 75% 65%,rgba(60,100,30,.18),transparent 45%)}.kott .card-bg{background:linear-gradient(145deg,#6b2a0a,#3d1505 40%,#1a0800)}.kott .card-overlay{background:linear-gradient(to top,rgba(15,5,2,.88),rgba(15,5,2,.2) 60%,transparent)}.kott .pattern{background:radial-gradient(circle at 30% 40%,rgba(180,80,20,.25),transparent 50%),radial-gradient(circle at 75% 65%,rgba(140,50,10,.18),transparent 45%)}.guacamole .card-bg{background:linear-gradient(145deg,#4f751c,#29440e 40%,#0d1c05)}.guacamole .card-overlay{background:linear-gradient(to top,rgba(3,10,1,.9),rgba(3,10,1,.2) 60%,transparent)}.guacamole .pattern{background:radial-gradient(circle at 20% 30%,rgba(150,200,55,.3),transparent 50%),radial-gradient(circle at 80% 70%,rgba(80,140,25,.2),transparent 45%)}.juice .card-bg{background:linear-gradient(145deg,#245f20,#173d13 45%,#0b1c08)}.juice .card-overlay{background:linear-gradient(to top,rgba(3,10,1,.92),rgba(3,10,1,.15) 65%,transparent)}.juice .pattern{background:radial-gradient(circle at 25% 25%,rgba(80,180,55,.25),transparent 50%),radial-gradient(circle at 80% 70%,rgba(220,130,25,.16),transparent 45%)}.char{position:absolute;top:50%;right:.08em;transform:translateY(-50%);font-size:9rem;line-height:1;pointer-events:none;user-select:none;color:rgba(255,255,255,.08)}.kimchi .char{font-family:'Noto Serif KR',serif;color:rgba(200,39,28,.12);font-size:11rem}.card-content{position:relative;z-index:2}.card-origin{font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem}.origin-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}.card-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,14vw,5.5rem);letter-spacing:.04em;line-height:.9;color:#fff}.card-name span{color:#7cb342}.card-desc{font-size:.78rem;color:rgba(245,234,216,.55);margin-top:.5rem;font-weight:300;line-height:1.4;max-width:330px}.card-arrow{position:absolute;right:1.5rem;bottom:1.5rem;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;z-index:2}.kimchi .card-origin{color:rgba(220,120,100,.9)}.kimchi .origin-dot{background:#c8271c}.kimchi .card-name span{color:#c8271c}.dolma .card-origin{color:rgba(130,180,80,.9)}.dolma .origin-dot{background:#6ab04c}.dolma .card-name span{color:#6ab04c}.kott .card-origin{color:rgba(220,150,80,.9)}.kott .origin-dot{background:#c8631c}.kott .card-name span{color:#c8631c}.guacamole .card-origin{color:rgba(165,210,90,.9)}.guacamole .origin-dot{background:#7cb342}.juice .card-origin{color:rgba(170,225,125,.9)}.juice .origin-dot{background:#73bd55}.juice .card-name span{color:#f2a52f}.kimchi .card-arrow{background:rgba(200,39,28,.25);border:1px solid rgba(200,39,28,.4)}.dolma .card-arrow{background:rgba(106,176,76,.2);border:1px solid rgba(106,176,76,.35)}.kott .card-arrow{background:rgba(200,99,28,.2);border:1px solid rgba(200,99,28,.35)}.guacamole .card-arrow{background:rgba(124,179,66,.2);border:1px solid rgba(124,179,66,.35)}.juice .card-arrow{background:rgba(100,180,70,.2);border:1px solid rgba(100,180,70,.35)}footer{text-align:center;font-size:.65rem;color:rgba(245,234,216,.2);letter-spacing:.08em;padding:.5rem 0 calc(.5rem + env(safe-area-inset-bottom));flex-shrink:0}@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}header{animation:fadeUp .4s ease both}.recipe-card{animation:fadeUp .4s ease both}.recipe-card:nth-child(1){animation-delay:.1s}.recipe-card:nth-child(2){animation-delay:.2s}.recipe-card:nth-child(3){animation-delay:.3s}.recipe-card:nth-child(4){animation-delay:.4s}.recipe-card:nth-child(5){animation-delay:.5s}@media (min-width:700px){.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;max-width:1000px;width:100%;margin:0 auto}.recipe-card{min-height:300px}.card-name{font-size:5rem}}
 </style>
 </head>
 <body>
-
-<div id="pinScreen">
-  <div class="pin-box">
-    <div class="pin-lock">🔒</div>
-    <div class="pin-title">LEGENDARISKA RECEPT</div>
-    <div class="pin-text">Ange PIN-koden för att fortsätta</div>
-    <input id="pinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••" aria-label="PIN-kod">
-    <button id="pinButton" type="button">LÅS UPP</button>
-    <div id="pinError"></div>
-  </div>
-</div>
-
-<div id="siteContent">
-<header>
-  <div class="logo">Legendariska Recept</div>
-  <div class="tagline">Välj ett recept och sätt igång</div>
-</header>
-<div class="cards">
-  <a class="recipe-card kimchi" href="kimchi-kalkylator.html" onclick="addRipple(event,this)"><div class="card-bg"></div><div class="kimchi-pattern"></div><div class="card-overlay"></div><div class="kimchi-char">김치</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Korea</div><div class="card-name">KIM<span>CHI</span></div><div class="card-desc">Fermenterad kål med chili, vitlök och ingefära. Kalkylator, dagbok & steg-för-steg.</div></div><div class="card-arrow">→</div></a>
-  <a class="recipe-card dolma" href="dolma-kalkylator.html" onclick="addRipple(event,this)"><div class="card-bg"></div><div class="dolma-pattern"></div><div class="card-overlay"></div><div class="dolma-char">🌿</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Mellanöstern & Medelhavet</div><div class="card-name">DOL<span>MA</span></div><div class="card-desc">Fyllda vindruvsblad med ris, kött och aromatiska kryddor. Mehsi på arabiska.</div></div><div class="card-arrow">→</div></a>
-  <a class="recipe-card kott" href="kottfars-kalkylator.html" onclick="addRipple(event,this)"><div class="card-bg"></div><div class="kott-pattern"></div><div class="card-overlay"></div><div class="kott-char">🥩</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Alla stilar · Mellanöstern · Medelhav · Husmanskost</div><div class="card-name">KÖTTFÄRS<span>KRYDDAREN</span></div><div class="card-desc">Ange vikt, välj stil och bocka vad du har hemma — får ut exakta gram av varje krydda.</div></div><div class="card-arrow">→</div></a>
-  <a class="recipe-card guacamole" href="guacamole-kalkylator.html" onclick="addRipple(event,this)"><div class="card-bg"></div><div class="guacamole-pattern"></div><div class="card-overlay"></div><div class="guacamole-char">🥑</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Mexiko</div><div class="card-name">GUACA<span>MOLE</span></div><div class="card-desc">Autentisk mexikansk guacamole med avokado, serrano, lök, koriander och tomat. Exakta gram & steg-för-steg.</div></div><div class="card-arrow">→</div></a>
-</div>
-<footer>Fler recept kommer</footer>
-</div>
-
-<script>
-const LOCAL_PIN='1512';
-const pinScreen=document.getElementById('pinScreen');
-const siteContent=document.getElementById('siteContent');
-const pinInput=document.getElementById('pinInput');
-const pinError=document.getElementById('pinError');
-
-function unlock(){
-  pinScreen.style.display='none';
-  siteContent.style.display='flex';
-}
-
-function checkPin(){
-  if(pinInput.value===LOCAL_PIN){
-    sessionStorage.setItem('recipePinUnlocked','1');
-    unlock();
-  }else{
-    pinError.textContent='Fel PIN-kod';
-    pinInput.value='';
-    pinInput.focus();
-  }
-}
-
-if(sessionStorage.getItem('recipePinUnlocked')==='1') unlock();
-else setTimeout(()=>pinInput.focus(),100);
-
-pinInput.addEventListener('keydown',e=>{if(e.key==='Enter') checkPin();});
-pinInput.addEventListener('input',()=>{pinError.textContent='';});
-document.getElementById('pinButton').addEventListener('click',checkPin);
-
-function addRipple(e,card){
-  var r=document.createElement('div');
-  r.className='ripple-el';
-  var rect=card.getBoundingClientRect();
-  var x=(e.clientX||rect.left+rect.width/2)-rect.left-40;
-  var y=(e.clientY||rect.top+rect.height/2)-rect.top-40;
-  r.style.left=x+'px';r.style.top=y+'px';card.appendChild(r);
-  setTimeout(()=>r.remove(),500);
-}
-</script>
+<div id="pinScreen"><div class="pin-box"><div class="pin-lock">🔒</div><div class="pin-title">LEGENDARISKA RECEPT</div><div class="pin-text">Ange PIN-koden för att fortsätta</div><input id="pinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••"><button id="pinButton" type="button">LÅS UPP</button><div id="pinError"></div></div></div>
+<div id="siteContent"><header><div class="logo">Legendariska Recept</div><div class="tagline">Välj ett recept och sätt igång</div></header><div class="cards">
+<a class="recipe-card kimchi" href="kimchi-kalkylator.html"><div class="card-bg"></div><div class="pattern"></div><div class="card-overlay"></div><div class="char">김치</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Korea</div><div class="card-name">KIM<span>CHI</span></div><div class="card-desc">Fermenterad kål med chili, vitlök och ingefära. Kalkylator, dagbok & steg-för-steg.</div></div><div class="card-arrow">→</div></a>
+<a class="recipe-card dolma" href="dolma-kalkylator.html"><div class="card-bg"></div><div class="pattern"></div><div class="card-overlay"></div><div class="char">🌿</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Mellanöstern & Medelhavet</div><div class="card-name">DOL<span>MA</span></div><div class="card-desc">Fyllda vindruvsblad med ris, kött och aromatiska kryddor. Mehsi på arabiska.</div></div><div class="card-arrow">→</div></a>
+<a class="recipe-card kott" href="kottfars-kalkylator.html"><div class="card-bg"></div><div class="pattern"></div><div class="card-overlay"></div><div class="char">🥩</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Alla stilar · Mellanöstern · Medelhav · Husmanskost</div><div class="card-name">KÖTTFÄRS<span>KRYDDAREN</span></div><div class="card-desc">Ange vikt, välj stil och bocka vad du har hemma — får ut exakta gram av varje krydda.</div></div><div class="card-arrow">→</div></a>
+<a class="recipe-card guacamole" href="guacamole-kalkylator.html"><div class="card-bg"></div><div class="pattern"></div><div class="card-overlay"></div><div class="char">🥑</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Mexiko</div><div class="card-name">GUACA<span>MOLE</span></div><div class="card-desc">Autentisk mexikansk guacamole med avokado, tomat, jalapeño, lök, koriander och lime (konventionellt).</div></div><div class="card-arrow">→</div></a>
+<a class="recipe-card juice" href="juice-kalkylator.html"><div class="card-bg"></div><div class="pattern"></div><div class="card-overlay"></div><div class="char">🥤</div><div class="card-content"><div class="card-origin"><span class="origin-dot"></span>Färskpressat · Juicepress</div><div class="card-name">JUICE<span>KALKYLATOR</span></div><div class="card-desc">Grön eller orange juice. Skala mängden, välj vad du har hemma och få en balanserad juice direkt.</div></div><div class="card-arrow">→</div></a>
+</div><footer>Fler recept kommer</footer></div>
+<script>const PIN='1512',screen=document.getElementById('pinScreen'),site=document.getElementById('siteContent'),input=document.getElementById('pinInput'),error=document.getElementById('pinError');function unlock(){screen.style.display='none';site.style.display='flex'}function check(){if(input.value===PIN){sessionStorage.setItem('recipePinUnlocked','1');unlock()}else{error.textContent='Fel PIN-kod';input.value='';input.focus()}}if(sessionStorage.getItem('recipePinUnlocked')==='1')unlock();else setTimeout(()=>input.focus(),100);input.addEventListener('keydown',e=>{if(e.key==='Enter')check()});input.addEventListener('input',()=>error.textContent='');document.getElementById('pinButton').addEventListener('click',check);</script>
 </body>
 </html>
