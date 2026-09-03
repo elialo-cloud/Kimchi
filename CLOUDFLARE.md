@@ -55,3 +55,7 @@ Refresh the page or open the site on another device. The batch should appear the
 - Sparade recept
 
 The timer intentionally remains local to the device so starting a timer on one device does not unexpectedly replace a timer on another device.
+
+## Deployment trigger
+
+This commit intentionally updates the setup guide to trigger the connected Cloudflare Pages deployment. No application behavior is changed by this line.
