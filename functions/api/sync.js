@@ -1,0 +1,83 @@
+const JSON_HEADERS = {
+  'content-type': 'application/json; charset=UTF-8',
+  'cache-control': 'no-store'
+};
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: JSON_HEADERS
+  });
+}
+
+function getUserId(request) {
+  // Cloudflare Access adds this header after successful authentication.
+  return request.headers.get('cf-access-authenticated-user-email')?.trim().toLowerCase() || null;
+}
+
+function validState(state) {
+  return state && typeof state === 'object' &&
+    Array.isArray(state.batches) &&
+    Array.isArray(state.inkopItems) &&
+    Array.isArray(state.savedRecipes);
+}
+
+export async function onRequestGet({ request, env }) {
+  if (!env.DB) return json({ error: 'D1 binding DB saknas.' }, 500);
+
+  const userId = getUserId(request);
+  if (!userId) return json({ error: 'Cloudflare Access krävs.' }, 401);
+
+  const row = await env.DB.prepare(
+    'SELECT data_json, updated_at FROM app_state WHERE user_id = ?1'
+  ).bind(userId).first();
+
+  if (!row) {
+    return json({ state: null, updatedAt: null });
+  }
+
+  try {
+    return json({ state: JSON.parse(row.data_json), updatedAt: row.updated_at });
+  } catch {
+    return json({ error: 'Sparad data kunde inte läsas.' }, 500);
+  }
+}
+
+export async function onRequestPut({ request, env }) {
+  if (!env.DB) return json({ error: 'D1 binding DB saknas.' }, 500);
+
+  const userId = getUserId(request);
+  if (!userId) return json({ error: 'Cloudflare Access krävs.' }, 401);
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Ogiltig JSON.' }, 400);
+  }
+
+  if (!validState(body.state)) {
+    return json({ error: 'Ogiltigt dataschema.' }, 400);
+  }
+
+  // Keep payloads deliberately bounded so a broken client cannot grow the row forever.
+  const payload = JSON.stringify(body.state);
+  if (payload.length > 500000) {
+    return json({ error: 'Datasatsen är för stor.' }, 413);
+  }
+
+  const now = new Date().toISOString();
+  await env.DB.prepare(`
+    INSERT INTO app_state (user_id, data_json, updated_at)
+    VALUES (?1, ?2, ?3)
+    ON CONFLICT(user_id) DO UPDATE SET
+      data_json = excluded.data_json,
+      updated_at = excluded.updated_at
+  `).bind(userId, payload, now).run();
+
+  return json({ ok: true, updatedAt: now });
+}
+
+export async function onRequestOptions() {
+  return new Response(null, { status: 204 });
+}
