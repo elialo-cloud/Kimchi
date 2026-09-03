@@ -8,10 +8,15 @@ export async function onRequest(context) {
   const html = await response.text();
   if (html.includes('/cloud-sync.js')) return new Response(html, response);
 
-  const injected = html.replace(
-    /<\/body>/i,
-    '<script src="/cloud-sync.js" defer></script></body>'
-  );
+  const injected = html
+    .replace(
+      /Dagboken och inköpslistan sparas lokalt i din webbläsare\./g,
+      'Dagboken, inköpslistan och sparade recept synkas till Cloudflare.'
+    )
+    .replace(
+      /<\/body>/i,
+      '<script src="/cloud-sync.js" defer></script></body>'
+    );
 
   const headers = new Headers(response.headers);
   headers.delete('content-length');
