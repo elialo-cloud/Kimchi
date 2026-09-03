@@ -2,6 +2,7 @@
   "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
   "name": "kimchi",
   "pages_build_output_dir": ".",
+  "compatibility_date": "2026-09-03",
   "d1_databases": [
     {
       "binding": "DB",
