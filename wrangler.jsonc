@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "kimchi",
+  "pages_build_output_dir": ".",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kimchi-db",
+      "database_id": "66f3f6ba-5780-4a3e-84cf-cbe95226a75f"
+    }
+  ]
+}
