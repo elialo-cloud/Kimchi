@@ -15,33 +15,33 @@
 <main class="container">
 <div class="section">MÄNGD</div>
 <section class="card">
-  <div class="amount-row"><div class="amount" id="servingsText">12</div><div class="unit">portioner</div><div class="yield" id="yieldText">≈ 180 g sås</div></div>
+  <div class="amount-row"><div class="amount" id="servingsText">12</div><div class="unit">portioner</div><div class="yield" id="yieldText">≈ 210 g sås</div></div>
   <input class="slider" id="slider" type="range" min="1" max="60" step="1" value="12">
   <div class="ticks"><span>1</span><span>12</span><span>30</span><span>60</span></div>
   <div class="manual">Eller ange portioner: <input id="manual" type="number" min="1" max="500" value="12"></div>
 </section>
 <div class="section">INGREDIENSER</div>
 <section class="card" id="ingredients"></section>
-<div class="note"><strong>Tips</strong>Blanda allt och låt stå i kylen minst 2 timmar. Helst över natten. Receptet ger cirka ¾ cup sås i originalversionen.</div>
+<div class="note"><strong>Tips</strong>Blanda allt och låt stå i kylen minst 2 timmar. Helst över natten. Receptet är för 12 portioner.</div>
 <section class="card"><div class="info"><b>Originalrecept:</b> The Daring Gourmet. Basen är 12 portioner. Ketchup ingår enligt receptet, även om originalets Big Mac-sås enligt artikeln inte gör det.</div><div class="source"><a href="https://www.daringgourmet.com/big-mac-sauce/" target="_blank" rel="noopener">Öppna originalreceptet ↗</a></div></section>
 </main>
 <script>
 const base=[
- ['Majonnäs',0.5,'cup', 'ml',120],
- ['Dill pickle relish',2,'msk','g',30],
- ['Finhackad gul lök',1,'msk','g',15],
- ['Ketchup',2,'msk','g',30],
- ['Gul senap',2,'tsk','g',10],
- ['Vitvinsvinäger',1,'tsk','g',5],
- ['Strösocker',1,'tsk','g',4],
- ['Paprikapulver',0.5,'tsk','g',1],
- ['Salt',0.25,'tsk','g',1.5],
- ['Vitlökspulver',0.25,'tsk','g',0.7],
- ['Lökpulver',0.25,'tsk','g',0.7]
+ ['Majonnäs',112],
+ ['Dill pickle relish',30],
+ ['Finhackad gul lök',10],
+ ['Ketchup',35],
+ ['Gul senap',10],
+ ['Vitvinsvinäger',5],
+ ['Strösocker',4],
+ ['Paprikapulver',1],
+ ['Salt',1.5],
+ ['Vitlökspulver',0.75],
+ ['Lökpulver',0.5]
 ];
 const slider=document.getElementById('slider'),manual=document.getElementById('manual');
-function fmt(n){if(n>=10)return Math.round(n)+' g'; if(n>=1)return (Math.round(n*10)/10).toString().replace('.',',')+' g'; return (Math.round(n*100)/100).toString().replace('.',',')+' g'}
-function render(v){v=Math.max(1,Number(v)||1);slider.value=Math.min(60,v);manual.value=v;document.getElementById('servingsText').textContent=v;document.getElementById('yieldText').textContent='≈ '+fmt(180*v/12)+' sås';document.getElementById('ingredients').innerHTML=base.map(x=>`<div class="ing"><div class="name">${x[0]}</div><div class="val">${fmt(x[4]*v/12)}</div></div>`).join('')}
+function fmt(n){if(n>=10)return Math.round(n)+' g';if(n>=1)return (Math.round(n*10)/10).toString().replace('.',',')+' g';return (Math.round(n*100)/100).toString().replace('.',',')+' g'}
+function render(v){v=Math.max(1,Number(v)||1);slider.value=Math.min(60,v);manual.value=v;document.getElementById('servingsText').textContent=v;document.getElementById('yieldText').textContent='≈ '+fmt(209.75*v/12)+' sås';document.getElementById('ingredients').innerHTML=base.map(x=>`<div class="ing"><div class="name">${x[0]}</div><div class="val">${fmt(x[1]*v/12)}</div></div>`).join('')}
 slider.addEventListener('input',e=>render(e.target.value));manual.addEventListener('input',e=>render(e.target.value));render(12);
 </script>
 </body>
