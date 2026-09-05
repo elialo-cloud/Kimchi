@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>🍔 Big Mac-sås</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7ec;--bg2:#f9ead5;--surface:#fff;--border:#ead5b8;--red:#b83b24;--red2:#8f2818;--gold:#d89a27;--text:#302016;--muted:#8d7664;--cream:#674d3a}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:2rem}.hero{position:relative;background:var(--red2);padding:2.8rem 1.3rem 2rem;text-align:center;overflow:hidden;color:#fff}.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}.hero-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11rem;opacity:.07;pointer-events:none}.back{position:absolute;top:1rem;left:1rem;color:#fff;text-decoration:none;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.12);padding:.4rem .7rem;border-radius:9px;font-size:.78rem}.hero-emoji{font-size:2.4rem;position:relative}.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(3.2rem,13vw,5.2rem);letter-spacing:.07em;line-height:.9;position:relative}.hero h1 span{display:block;font-size:.43em;letter-spacing:.18em;color:rgba(255,255,255,.72);margin-top:.35rem}.sub{font-size:.73rem;color:rgba(255,255,255,.62);margin-top:.55rem;letter-spacing:.08em;text-transform:uppercase;position:relative}.container{max-width:580px;margin:auto;padding:1.3rem 1rem}.section{font-family:'Bebas Neue',sans-serif;letter-spacing:.16em;font-size:.9rem;color:var(--red);display:flex;gap:.6rem;align-items:center;margin-bottom:.55rem}.section::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,var(--border),transparent)}.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.2rem 1.25rem;margin-bottom:1rem;box-shadow:0 2px 12px rgba(100,50,10,.06)}.amount-row{display:flex;align-items:end;gap:.5rem;margin-bottom:1rem}.amount{font-family:'Bebas Neue',sans-serif;font-size:4.7rem;line-height:1;color:var(--red)}.unit{font-size:.95rem;color:var(--muted);padding-bottom:.6rem}.yield{margin-left:auto;background:#fff4dc;border:1px solid #efd7a9;border-radius:30px;padding:.38rem .7rem;font-size:.72rem;color:#9a6a15;font-weight:600;white-space:nowrap}.slider{width:100%;height:5px;appearance:none;border-radius:5px;background:var(--border);outline:none}.slider::-webkit-slider-thumb{appearance:none;width:24px;height:24px;border-radius:50%;background:var(--red);box-shadow:0 2px 8px rgba(184,59,36,.35)}.ticks{display:flex;justify-content:space-between;color:#b6a18d;font-size:.65rem;margin-top:.35rem}.manual{display:flex;align-items:center;gap:.5rem;margin-top:.8rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.5rem .7rem;font-size:.76rem;color:var(--muted)}.manual input{width:75px;border:0;border-bottom:1px solid #c9af92;background:transparent;text-align:center;font:1rem 'DM Sans';color:var(--text);outline:none}.ing{display:flex;align-items:center;justify-content:space-between;padding:.56rem 0;border-bottom:1px solid #f0e3d2;gap:.7rem}.ing:last-child{border-bottom:0}.name{font-size:.86rem;color:var(--cream);line-height:1.25}.val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--red);white-space:nowrap}.note{background:#fff7e7;border-left:2px solid var(--gold);padding:.75rem .9rem;border-radius:0 10px 10px 0;font-size:.76rem;line-height:1.55;color:var(--cream);margin-top:1rem}.note strong{display:block;color:#9a6a15;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.15rem}.info{font-size:.77rem;color:var(--muted);line-height:1.55}.source{font-size:.68rem;color:#aa9582;margin-top:1rem;text-align:center}.source a{color:var(--red)}@media(min-width:700px){.container{padding-top:2rem}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="hero-bg">🍔</div><a class="back" href="index.html">← Till recepten</a><div class="hero-emoji">🍔</div><h1>BIG MAC-SÅS<span>KALKYLATOR</span></h1><div class="sub">The Daring Gourmet · skalad i gram</div></header>
+<main class="container">
+<div class="section">MÄNGD</div>
+<section class="card">
+  <div class="amount-row"><div class="amount" id="servingsText">12</div><div class="unit">portioner</div><div class="yield" id="yieldText">≈ 180 g sås</div></div>
+  <input class="slider" id="slider" type="range" min="1" max="60" step="1" value="12">
+  <div class="ticks"><span>1</span><span>12</span><span>30</span><span>60</span></div>
+  <div class="manual">Eller ange portioner: <input id="manual" type="number" min="1" max="500" value="12"></div>
+</section>
+<div class="section">INGREDIENSER</div>
+<section class="card" id="ingredients"></section>
+<div class="note"><strong>Tips</strong>Blanda allt och låt stå i kylen minst 2 timmar. Helst över natten. Receptet ger cirka ¾ cup sås i originalversionen.</div>
+<section class="card"><div class="info"><b>Originalrecept:</b> The Daring Gourmet. Basen är 12 portioner. Ketchup ingår enligt receptet, även om originalets Big Mac-sås enligt artikeln inte gör det.</div><div class="source"><a href="https://www.daringgourmet.com/big-mac-sauce/" target="_blank" rel="noopener">Öppna originalreceptet ↗</a></div></section>
+</main>
+<script>
+const base=[
+ ['Majonnäs',0.5,'cup', 'ml',120],
+ ['Dill pickle relish',2,'msk','g',30],
+ ['Finhackad gul lök',1,'msk','g',15],
+ ['Ketchup',2,'msk','g',30],
+ ['Gul senap',2,'tsk','g',10],
+ ['Vitvinsvinäger',1,'tsk','g',5],
+ ['Strösocker',1,'tsk','g',4],
+ ['Paprikapulver',0.5,'tsk','g',1],
+ ['Salt',0.25,'tsk','g',1.5],
+ ['Vitlökspulver',0.25,'tsk','g',0.7],
+ ['Lökpulver',0.25,'tsk','g',0.7]
+];
+const slider=document.getElementById('slider'),manual=document.getElementById('manual');
+function fmt(n){if(n>=10)return Math.round(n)+' g'; if(n>=1)return (Math.round(n*10)/10).toString().replace('.',',')+' g'; return (Math.round(n*100)/100).toString().replace('.',',')+' g'}
+function render(v){v=Math.max(1,Number(v)||1);slider.value=Math.min(60,v);manual.value=v;document.getElementById('servingsText').textContent=v;document.getElementById('yieldText').textContent='≈ '+fmt(180*v/12)+' sås';document.getElementById('ingredients').innerHTML=base.map(x=>`<div class="ing"><div class="name">${x[0]}</div><div class="val">${fmt(x[4]*v/12)}</div></div>`).join('')}
+slider.addEventListener('input',e=>render(e.target.value));manual.addEventListener('input',e=>render(e.target.value));render(12);
+</script>
+</body>
+</html>
