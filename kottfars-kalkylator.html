@@ -91,13 +91,8 @@ footer{text-align:center;font-size:0.7rem;color:var(--muted2);margin-top:1.5rem;
     <div class="weight-row"><input class="weight-input" type="number" id="weightInput" min="100" max="5000" step="50" placeholder="500" oninput="onWeightChange()"><span class="weight-unit">gram</span></div>
     <div class="quick-btns"><button class="quick-btn" onclick="setWeight(400)">400 g</button><button class="quick-btn" onclick="setWeight(500)">500 g</button><button class="quick-btn" onclick="setWeight(750)">750 g</button><button class="quick-btn" onclick="setWeight(1000)">1 kg</button><button class="quick-btn" onclick="setWeight(1500)">1,5 kg</button><button class="quick-btn" onclick="setWeight(2000)">2 kg</button></div>
   </div>
-  <div class="section-label">Kryddstil</div>
-  <div class="card"><div class="style-grid">
-    <button class="style-btn active" id="style-mellanostern" onclick="setStyle('mellanostern')"><span class="style-icon">🌙</span>Mellanöstern<br><small style="font-size:0.65rem;color:var(--muted);font-weight:400;">Baharat, spiskummin, kanel</small></button>
-    <button class="style-btn" id="style-medelhav" onclick="setStyle('medelhav')"><span class="style-icon">🫒</span>Medelhav<br><small style="font-size:0.65rem;color:var(--muted);font-weight:400;">Oregano, vitlök, citron</small></button>
-    <button class="style-btn" id="style-husmanskost" onclick="setStyle('husmanskost')"><span class="style-icon">🇸🇪</span>Husmanskost<br><small style="font-size:0.65rem;color:var(--muted);font-weight:400;">Timjan, lök, persilja</small></button>
-    <button class="style-btn" id="style-mix" onclick="setStyle('mix')"><span class="style-icon">🔥</span>Mix / Kebab<br><small style="font-size:0.65rem;color:var(--muted);font-weight:400;">Allt det bästa</small></button>
-  </div></div>
+  <div class="section-label">Din kryddning</div>
+  <div class="card" style="font-size:0.85rem;line-height:1.6;color:var(--cream2);">Din egen blandning med salt, peppar, persilja, soja, senap och paprikakrydda. Mängderna räknas automatiskt om efter köttfärsens vikt.</div>
   <div class="section-label">Vad har du hemma?</div>
   <div class="card"><div class="spice-grid" id="spiceGrid"></div><div class="select-row"><span class="select-link" onclick="selectAll()">Välj alla</span><span style="color:var(--muted2);font-size:0.75rem;">·</span><span class="select-link" onclick="selectNone()">Rensa alla</span></div></div>
   <div class="section-label">Ditt recept</div>
@@ -109,45 +104,24 @@ footer{text-align:center;font-size:0.7rem;color:var(--muted2);margin-top:1.5rem;
 <script>
 var BASE_W = 500;
 var ALL_SPICES = [
-  { id:'salt',name:'Salt',info:'',styles:['mellanostern','medelhav','husmanskost','mix'] },
-  { id:'svartpeppar',name:'Svartpeppar',info:'',styles:['mellanostern','medelhav','husmanskost','mix'] },
-  { id:'vitlok',name:'Vitlök, pressad',info:'klyftor',styles:['mellanostern','medelhav','husmanskost','mix'] },
-  { id:'lok',name:'Gul lök, riven',info:'finhackat eller riven',styles:['mellanostern','husmanskost','mix'] },
-  { id:'spiskummin',name:'Spiskummin',info:'mald',styles:['mellanostern','mix'] },
-  { id:'koriander',name:'Koriander',info:'mald',styles:['mellanostern','mix'] },
-  { id:'kanel',name:'Kanel',info:'mald',styles:['mellanostern','mix'] },
-  { id:'flefle',name:'Flefle / Paprika',info:'röd paprika',styles:['mellanostern','mix'] },
-  { id:'sjukryddor',name:'Sju kryddor',info:'baharat-mix',styles:['mellanostern','mix'] },
-  { id:'mynta',name:'Mynta',info:'torkad',styles:['mellanostern'] },
-  { id:'gurkmeja',name:'Gurkmeja',info:'',styles:['mellanostern','mix'] },
-  { id:'sumak',name:'Sumak',info:'syrlig',styles:['mellanostern'] },
-  { id:'oregano',name:'Oregano',info:'torkad',styles:['medelhav','husmanskost','mix'] },
-  { id:'timjan',name:'Timjan',info:'torkad',styles:['medelhav','husmanskost'] },
-  { id:'rosmarin',name:'Rosmarin',info:'torkad',styles:['medelhav'] },
-  { id:'basilika',name:'Basilika',info:'torkad',styles:['medelhav'] },
-  { id:'citron',name:'Citronskal',info:'rivet',styles:['medelhav'] },
-  { id:'persilja',name:'Persilja',info:'torkad',styles:['husmanskost','mix'] },
-  { id:'ingefara',name:'Ingefära',info:'mald',styles:['husmanskost','mellanostern','mix'] },
-  { id:'senapsfrön',name:'Senap',info:'dijonsenap',styles:['husmanskost'] },
-  { id:'worcester',name:'Worcestershiresås',info:'',styles:['husmanskost','mix'] },
-  { id:'sojasas',name:'Sojasås',info:'',styles:['husmanskost','mix'] }
+  { id:'salt',name:'Salt',info:'',styles:['egen'] },
+  { id:'svartpeppar',name:'Svartpeppar',info:'mald',styles:['egen'] },
+  { id:'persilja',name:'Persilja',info:'torkad',styles:['egen'] },
+  { id:'sojasas',name:'Soja',info:'sojasås',styles:['egen'] },
+  { id:'senap',name:'Senap',info:'dijonsenap',styles:['egen'] },
+  { id:'paprika',name:'Paprikakrydda',info:'mald',styles:['egen'] }
 ];
 var RECIPES = {
-  mellanostern:{name:'Mellanöstern / Kebab',base:[
-    {id:'salt',g:4,unit:'g',note:'ca 0,8% av köttets vikt — mildare salthalt'},
-    {id:'svartpeppar',g:2,unit:'g',note:''},{id:'spiskummin',g:4,unit:'g',note:'ger den karakteristiska smaken'},{id:'koriander',g:2,unit:'g',note:''},{id:'kanel',g:0.8,unit:'g',note:'lite ger djup, inte söt smak'},{id:'flefle',g:3,unit:'g',note:''},{id:'sjukryddor',g:2,unit:'g',note:'baharat'},{id:'vitlok',g:2,unit:'klyftor',note:''},{id:'lok',g:60,unit:'g',note:'riven, krama ur vattnet'},{id:'gurkmeja',g:1,unit:'g',note:'ger fin färg'},{id:'mynta',g:1.5,unit:'g',note:'torkad'},{id:'sumak',g:1.5,unit:'g',note:'syrlig finish'}
-  ],tip:'Krama ur vätskan ur löken ordentligt — annars faller färsen isär. Forma till avlånga kebabspett och grilla eller stek på hög värme.'},
-  medelhav:{name:'Medelhav / Grekisk',base:[
-    {id:'salt',g:4,unit:'g',note:'ca 0,8% av köttets vikt — mildare salthalt'},{id:'svartpeppar',g:1.5,unit:'g',note:''},{id:'vitlok',g:3,unit:'klyftor',note:''},{id:'oregano',g:3,unit:'g',note:'torkat är starkare än färskt'},{id:'timjan',g:1.5,unit:'g',note:''},{id:'rosmarin',g:1,unit:'g',note:'finhackat'},{id:'basilika',g:2,unit:'g',note:''},{id:'citron',g:1,unit:'g',note:'rivet skal, ej juice'},{id:'lok',g:50,unit:'g',note:'finhackad'}
-  ],tip:'Citronskalet ger fräschör utan att göra färsen blöt. Perfekt för köttbullar i tomatsås, gyros-biffar eller fyllning i paprika.'},
-  husmanskost:{name:'Husmanskost / Klassisk',base:[
-    {id:'salt',g:4,unit:'g',note:'ca 0,8% av köttets vikt — mildare salthalt'},{id:'svartpeppar',g:2,unit:'g',note:''},{id:'vitlok',g:1,unit:'klyftor',note:'valfritt'},{id:'lok',g:70,unit:'g',note:'finhackad och stekt'},{id:'timjan',g:1.5,unit:'g',note:''},{id:'oregano',g:1,unit:'g',note:''},{id:'persilja',g:3,unit:'g',note:'torkad'},{id:'ingefara',g:1,unit:'g',note:'mald, ger djup'},{id:'worcester',g:5,unit:'ml',note:'mindre salt'},{id:'sojasas',g:3,unit:'ml',note:'mindre salt, ger umami och färg'},{id:'senapsfrön',g:8,unit:'g',note:'dijonsenap'}
-  ],tip:'Stek löken mjuk och karamelliserad innan du blandar i färsen — det ger helt annan djup än rå lök. Worcestershiresåsen är det hemliga vapnet.'},
-  mix:{name:'Mix / Kebab Deluxe',base:[
-    {id:'salt',g:4,unit:'g',note:'ca 0,8% av köttets vikt — mildare salthalt'},{id:'svartpeppar',g:2,unit:'g',note:''},{id:'vitlok',g:3,unit:'klyftor',note:''},{id:'lok',g:60,unit:'g',note:'riven, krama ur'},{id:'spiskummin',g:3,unit:'g',note:''},{id:'koriander',g:2,unit:'g',note:''},{id:'flefle',g:3,unit:'g',note:''},{id:'sjukryddor',g:2,unit:'g',note:''},{id:'kanel',g:0.5,unit:'g',note:''},{id:'oregano',g:2,unit:'g',note:''},{id:'persilja',g:2,unit:'g',note:''},{id:'gurkmeja',g:1,unit:'g',note:''},{id:'ingefara',g:1,unit:'g',note:''},{id:'worcester',g:4,unit:'ml',note:'mindre salt'}
-  ],tip:'Det bästa från alla stilar. Perfekt för köttfärssås, köttbullar, hamburgare och allt däremellan. Stark nog att stå ensam, mild nog att passa alla.'}
+  egen:{name:'Min kryddning',base:[
+    {id:'salt',g:4,unit:'g',note:'lagom grundmängd per 500 g färs'},
+    {id:'svartpeppar',g:2,unit:'g',note:''},
+    {id:'persilja',g:2,unit:'g',note:'torkad'},
+    {id:'sojasas',g:5,unit:'ml',note:'ger sälta och umami'},
+    {id:'senap',g:8,unit:'g',note:'dijonsenap'},
+    {id:'paprika',g:3,unit:'g',note:'paprikakrydda'}
+  ],tip:'Blanda kryddorna och såserna ordentligt med färsen. Soja och senap bidrar också med sälta, så stek gärna en liten provbit och smaka innan du tillsätter extra salt.'}
 };
-var currentStyle='mellanostern';var checkedSpices={};var currentWeight=500;
+var currentStyle='egen';var checkedSpices={};var currentWeight=500;
 function getStyleSpices(style){return ALL_SPICES.filter(function(s){return s.styles.indexOf(style)!==-1;});}
 function renderSpiceGrid(){var spices=getStyleSpices(currentStyle),h='';for(var i=0;i<spices.length;i++){var s=spices[i],checked=checkedSpices[s.id]!==false;if(checkedSpices[s.id]===undefined)checkedSpices[s.id]=true;h+='<div class="spice-item'+(checked?' checked':'')+'" id="spice-'+s.id+'" onclick="toggleSpice(\''+s.id+'\')"><div class="spice-cb">'+(checked?'✓':'')+'</div><div class="spice-name">'+s.name;if(s.info)h+='<small>'+s.info+'</small>';h+='</div></div>';}document.getElementById('spiceGrid').innerHTML=h;}
 function toggleSpice(id){checkedSpices[id]=!checkedSpices[id];var el=document.getElementById('spice-'+id);if(el){el.className='spice-item'+(checkedSpices[id]?' checked':'');el.querySelector('.spice-cb').textContent=checkedSpices[id]?'✓':'';el.querySelector('.spice-cb').style.color=checkedSpices[id]?'#fff':'transparent';}renderResult();}
@@ -159,7 +133,7 @@ function onWeightChange(){var v=parseInt(document.getElementById('weightInput').
 function fmtAmt(val,unit){if(unit==='klyftor')return Math.max(1,Math.round(val))+' klyftor';if(unit==='ml'){var rounded=Math.round(val*2)/2;return rounded.toFixed(rounded===Math.floor(rounded)?0:1).replace('.',',')+' ml';}if(val<1)return '¼ tsk';if(val<2)return '½ tsk';if(val<4)return Math.round(val*2)/2+' g';return Math.round(val)+' g';}
 function renderResult(){var w=currentWeight;if(!w||w<50){document.getElementById('resultCard').innerHTML='<div class="result-empty">Ange vikt ovan för att få ditt recept.</div>';return;}var ratio=w/BASE_W,recipe=RECIPES[currentStyle],present=[],missing=[];for(var i=0;i<recipe.base.length;i++){var item=recipe.base[i],scaled=item.g*ratio;if(checkedSpices[item.id]===false)missing.push(item);else present.push({item:item,scaled:scaled});}var wStr=w>=1000?(w/1000).toFixed(w%1000===0?0:1).replace('.',',')+' kg':w+' g';var h='<div class="result-profile">'+recipe.name+' · '+wStr+' färs</div>';if(present.length===0)h+='<div class="result-empty">Du har bockat av noll kryddor — bocka i vad du har hemma!</div>';else{for(var j=0;j<present.length;j++){var p=present[j],spiceObj=null;for(var k=0;k<ALL_SPICES.length;k++)if(ALL_SPICES[k].id===p.item.id){spiceObj=ALL_SPICES[k];break;}h+='<div class="result-row"><div class="result-spice">'+(spiceObj?spiceObj.name:p.item.id);if(p.item.note)h+='<small>'+p.item.note+'</small>';h+='</div><div class="result-amount">'+fmtAmt(p.scaled,p.item.unit)+'</div></div>';}}if(missing.length>0){h+='<div class="missing-section"><div class="ms-title">Saknas hemma — handla eller skippa:</div>';for(var m=0;m<missing.length;m++){var sp=null;for(var n=0;n<ALL_SPICES.length;n++)if(ALL_SPICES[n].id===missing[m].id){sp=ALL_SPICES[n];break;}h+='<div class="ms-item">· '+(sp?sp.name:missing[m].id)+'</div>';}h+='</div>';}if(recipe.tip)h+='<div class="tip-box"><strong>Kocktips</strong>'+recipe.tip+'</div>';document.getElementById('resultCard').innerHTML=h;}
 function exportRecipe(){var w=currentWeight,ratio=w/BASE_W,recipe=RECIPES[currentStyle],wStr=w>=1000?(w/1000).toFixed(1).replace('.',',')+' kg':w+' g',L=[];L.push('KÖTTFÄRSKRYDDNING — '+wStr);L.push('Stil: '+recipe.name+'\n');for(var i=0;i<recipe.base.length;i++){var item=recipe.base[i];if(checkedSpices[item.id]===false)continue;var sp=null;for(var k=0;k<ALL_SPICES.length;k++)if(ALL_SPICES[k].id===item.id){sp=ALL_SPICES[k];break;}L.push('  '+(sp?sp.name:item.id)+': '+fmtAmt(item.g*ratio,item.unit));}L.push('\nTips: '+recipe.tip);var txt=L.join('\n'),btn=document.querySelector('.export-btn');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){btn.textContent='✓ KOPIERAT!';setTimeout(function(){btn.textContent='📋 KOPIERA KRYDDBLANDNING';},2000);});}else{var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);btn.textContent='✓ KOPIERAT!';setTimeout(function(){btn.textContent='📋 KOPIERA KRYDDBLANDNING';},2000);}}
-setStyle('mellanostern');setWeight(500);renderResult();
+setStyle('egen');setWeight(500);renderResult();
 </script>
 </body>
 </html>
